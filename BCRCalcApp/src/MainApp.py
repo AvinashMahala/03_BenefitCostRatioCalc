@@ -59,7 +59,8 @@ class TabbedMenuApp:
     def create_tab(self, tab_title):
         tab_frame = ttk.Frame(self.notebook)
         self.notebook.add(tab_frame, text=tab_title)
-
+        work_area_label = ttk.Label(tab_frame, text=f"This is the {tab_title} work area.", font=("Arial", 14))
+        work_area_label.pack(padx=20, pady=20)
         if tab_title == "Deck":
             deck_form = DynamicDataEntryForm(tab_frame, database_name=DATABASE_NAME)
             # deck_form.pack(fill='both', expand=True)
@@ -67,8 +68,8 @@ class TabbedMenuApp:
             data_loader_form = DataLoaderForm(tab_frame, database_name=DATABASE_NAME)
             data_loader_form.pack(fill='both', expand=True)
 
-        work_area_label = ttk.Label(tab_frame, text=f"This is the {tab_title} work area.", font=("Arial", 14))
-        work_area_label.pack(padx=20, pady=20)
+        
+
 
 if __name__ == "__main__":
     root = tk.Tk()
