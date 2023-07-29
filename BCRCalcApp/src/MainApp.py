@@ -3,6 +3,7 @@ from tkinter import ttk
 import pandas as pd
 import sqlite3
 from BenefitCostRatioCalcApp import DynamicDataEntryForm
+from DataLoader import DataLoaderForm
 
 DATABASE_NAME = "AppMetaData.db"
 
@@ -37,7 +38,7 @@ def initialize_database():
 class TabbedMenuApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Tabbed Menu Example")
+        self.root.title("Benefit Cost Ratio Calculator")
 
         # Initialize the database
         # initialize_database()
@@ -62,6 +63,9 @@ class TabbedMenuApp:
         if tab_title == "Deck":
             deck_form = DynamicDataEntryForm(tab_frame, database_name=DATABASE_NAME)
             # deck_form.pack(fill='both', expand=True)
+        if tab_title == "Data Loader":
+            data_loader_form = DataLoaderForm(tab_frame, database_name=DATABASE_NAME)
+            data_loader_form.pack(fill='both', expand=True)
 
         work_area_label = ttk.Label(tab_frame, text=f"This is the {tab_title} work area.", font=("Arial", 14))
         work_area_label.pack(padx=20, pady=20)
