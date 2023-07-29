@@ -1,11 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
 import pandas as pd
+import sqlite3
 
 class DynamicDataEntryForm:
-    def __init__(self, root):
+    def __init__(self, root, database_name):
         self.root = root
         # self.root.title("Benefit Cost Ratio Calculator")
+        self.database_name = database_name
         
         self.rows = []
         self.add_row()
@@ -18,6 +20,20 @@ class DynamicDataEntryForm:
 
         read_button = ttk.Button(root, text="Read from Excel", command=self.read_from_excel)
         read_button.pack(pady=5)
+
+        read_db_button = ttk.Button(root, text="Read from Database", command=self.read_from_database)
+        read_db_button.pack(pady=5)
+
+    def read_from_database(self):
+            try:
+                conn = sqlite3.connect(self.database_name)
+                df = pd.read_sql_query("SELECT * FROM DeckElementNames", conn)
+                conn.close()
+
+                print("Data read from database:")
+                print(df)
+            except sqlite3.Error as e:
+                print(f"Error while reading from database: {e}")
 
     def add_row(self):
         row_frame = ttk.Frame(self.root)
