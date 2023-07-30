@@ -31,7 +31,7 @@ class DeckTab(ttk.Frame):
         self.final_cost_label.pack()
 
         self.dynamic_rows = []
-        for _ in range(10):  # replace with the actual number of rows you want
+        for _ in range(1):  # replace with the actual number of rows you want
             self.add_row()
 
     def add_row(self):
