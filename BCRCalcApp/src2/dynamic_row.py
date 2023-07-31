@@ -258,12 +258,46 @@ class DynamicRow(ttk.Frame):
 
         
         # Actions
-        action_button = ttk.Button(self.actions_frame, text="Perform action")
-        action_button.pack()
+        remove_button = ttk.Button(self.actions_frame, text="REMOVE ROW", command=self.remove_row)
+        remove_button.pack()
+
+        calculate_button = ttk.Button(self.actions_frame, text="Calculate", command=self.calculate_cost)
+        calculate_button.pack()
+
         
         # Cost Information
         cost_label = ttk.Label(self.cost_info_frame, text="Cost Information")
         cost_label.pack()
+
+    def remove_row(self):
+        # Get the parent container (usually the main window or some other frame)
+        parent_container = self.master
+
+        # Find the index of the current row within the parent container
+        row_index = -1
+        for idx, widget in enumerate(parent_container.grid_slaves()):
+            if isinstance(widget, DynamicRow) and widget == self:
+                row_index = idx
+                break
+
+        if row_index != -1:
+            # Remove the current row from the parent container
+            self.destroy()
+
+            # Update the dynamic_rows list (assuming it's a list containing instances of DynamicRow)
+            dynamic_rows.pop(row_index)
+
+
+    def calculate_cost(self):
+        # Replace with your actual calculation logic
+        try:
+            quantity = int(self.quantity_var.get())
+            unit_price = float(self.unit_price_var.get())
+            cost = quantity * unit_price
+            print("Total Cost:", cost)  # You can display the result in a label or any other way you prefer
+        except ValueError:
+            print("Invalid quantity or unit price")
+
 
     def on_bid_item_selected(self, event):
         selected_bid_item = self.bid_item_var.get()
