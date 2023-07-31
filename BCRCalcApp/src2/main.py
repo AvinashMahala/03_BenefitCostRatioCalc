@@ -23,6 +23,8 @@ class Application(tk.Tk):
         self.notebook = ttk.Notebook(self)
         
         self.homepage = Homepage(self, self.notebook)
+        self.uuid=self.homepage.uuid
+        self.bridgeId=self.homepage.bridgeId
         self.notebook.add(self.homepage, text="Homepage")
         self.notebook.pack(fill="both", expand=True)
 
@@ -35,7 +37,7 @@ class Application(tk.Tk):
         self.benefit_cost_ratio = None
 
     def activate_tabs(self, bridge_id, uuid):
-        self.deck_tab = DeckTab(self.notebook, self)
+        self.deck_tab = DeckTab(self.notebook, self,bridge_id,uuid)
         self.notebook.add(self.deck_tab, text="Deck")
 
         # Repeat the above steps for the other tabs

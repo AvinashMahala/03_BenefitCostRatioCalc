@@ -10,6 +10,8 @@ class Homepage(ttk.Frame):
         super().__init__(master)
         self.notebook = notebook
         self.create_widgets()
+        self.uuid=""
+        self.bridgeId=""
 
     def create_widgets(self):
         self.start_calculation_area = ttk.LabelFrame(self, text="Start Calculation Area")
@@ -22,6 +24,8 @@ class Homepage(ttk.Frame):
     def generate_calculation(self):
         bridge_id = self.bridge_id_entry.get()
         unique_id = str(uuid.uuid4())
+        self.uuid=unique_id
+        self.bridgeId=bridge_id
         self.master.database.insert_calculation_metadata(bridge_id, unique_id)
         self.master.activate_tabs(bridge_id, unique_id)
         self.master.show_msg(f"Successfully stored the Bridge ID: {bridge_id} and UUID: {unique_id}")
