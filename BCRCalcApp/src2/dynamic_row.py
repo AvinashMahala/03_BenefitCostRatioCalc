@@ -258,8 +258,10 @@ class DynamicRow(ttk.Frame):
 
         
         # Actions
-        remove_button = ttk.Button(self.actions_frame, text="REMOVE ROW", command=self.remove_row)
-        remove_button.pack()
+        # In the DynamicRow class, add this to the __init__ method where the button is created:
+        remove_row_button = ttk.Button(self.actions_frame, text="REMOVE ROW", command=self.remove_row)
+        remove_row_button.pack()
+
 
         calculate_button = ttk.Button(self.actions_frame, text="Calculate", command=self.calculate_cost)
         calculate_button.pack()
@@ -270,22 +272,26 @@ class DynamicRow(ttk.Frame):
         cost_label.pack()
 
     def remove_row(self):
-        # Get the parent container (usually the main window or some other frame)
-        parent_container = self.master
+        # Get the parent container (the notebook tab)
+        parent_container = self.master.master
+        pp=self.master.master.master
 
-        # Find the index of the current row within the parent container
-        row_index = -1
-        for idx, widget in enumerate(parent_container.grid_slaves()):
-            if isinstance(widget, DynamicRow) and widget == self:
-                row_index = idx
-                break
-
-        if row_index != -1:
-            # Remove the current row from the parent container
+        # Check if this dynamic row is the last row, and there are more than one rows
+        if len(pp.dynamic_rows) > 1 and pp.dynamic_rows[-1] == self:
+            # Destroy this dynamic row widget
             self.destroy()
+            # Remove this dynamic row instance from the list
+            pp.dynamic_rows.pop()
 
-            # Update the dynamic_rows list (assuming it's a list containing instances of DynamicRow)
-            dynamic_rows.pop(row_index)
+            # Update the grid layout of the parent container (the notebook tab)
+            # to reorganize the remaining rows
+            for i, row in enumerate(pp.dynamic_rows):
+                row.grid(row=i, column=0, padx=5, pady=5)
+
+            # If you want to perform any other actions after removing the row, do it here
+        else:
+            # If this is the only row, do not remove it
+            print("Cannot remove the last row.")
 
 
     def calculate_cost(self):

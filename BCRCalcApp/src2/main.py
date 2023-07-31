@@ -47,5 +47,7 @@ if __name__ == "__main__":
     app = Application()
     app.title("Benefit Cost Ratio Application")
     app.geometry('800x600')  # Set default width (800) and height (600)
+    app['background']='#856ff8'  # Set the background color for the root window
+
     app.mainloop()
 
