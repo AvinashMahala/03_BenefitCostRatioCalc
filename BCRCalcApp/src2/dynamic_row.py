@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+
 class DynamicRow(ttk.Frame):
     def __init__(self, container, controller, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
@@ -90,46 +91,85 @@ class DynamicRow(ttk.Frame):
         self.condition_state_1_frame.grid(column=1, row=0, padx=10, pady=10)
 
         # a) BidItem
-        self.bid_item_var = tk.StringVar()
-        self.bid_item_label = ttk.Label(self.condition_state_1_frame, text="BidItem")
-        self.bid_item_dropdown = ttk.Combobox(self.condition_state_1_frame, textvariable=self.bid_item_var, state='disabled')
-        self.bid_item_dropdown.bind('<<ComboboxSelected>>', self.on_bid_item_selected)
+        self.cs1_bid_item_var = tk.StringVar()
+        self.cs1_bid_item_label = ttk.Label(self.condition_state_1_frame, text="BidItem")
+        self.cs1_bid_item_dropdown = ttk.Combobox(self.condition_state_1_frame, textvariable=self.bid_item_var, state='disabled')
+        self.cs1_bid_item_dropdown.bind('<<ComboboxSelected>>', self.on_bid_item_selected)
 
         # b) InterventionDescription
-        self.intervention_description_var = tk.StringVar()
-        self.intervention_description_label = ttk.Label(self.condition_state_1_frame, text="InterventionDescription")
-        self.intervention_description_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.intervention_description_var, state='disabled')
-
-        # c) UnitOfMeasure
-        self.unit_of_measure_var = tk.StringVar()
-        self.unit_of_measure_label = ttk.Label(self.condition_state_1_frame, text="UnitOfMeasure")
-        self.unit_of_measure_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.unit_of_measure_var, state='disabled')
-
-        # d) UnitPrice
-        self.unit_price_var = tk.StringVar()
-        self.unit_price_label = ttk.Label(self.condition_state_1_frame, text="UnitPrice")
-        self.unit_price_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.unit_price_var, state='disabled')
-
-        # e) Quantity
-        self.quantity_var = tk.StringVar()
-        self.quantity_label = ttk.Label(self.condition_state_1_frame, text="Quantity")
-        self.quantity_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.quantity_var, state='disabled')
-
+        self.cs1_intervention_description_var = tk.StringVar()
+        self.cs1_intervention_description_label = ttk.Label(self.condition_state_1_frame, text="InterventionDescription")
+        self.cs1_intervention_description_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.intervention_description_var, state='disabled')
+			 
+        # c) cs1_UnitOfMeasure
+        self.cs1_unit_of_measure_var = tk.StringVar()
+        self.cs1_unit_of_measure_label = ttk.Label(self.condition_state_1_frame, text="UnitOfMeasure")
+        self.cs1_unit_of_measure_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.unit_of_measure_var, state='disabled')
+			 
+        # d) cs1_UnitPrice
+        self.cs1_unit_price_var = tk.StringVar()
+        self.cs1_unit_price_label = ttk.Label(self.condition_state_1_frame, text="UnitPrice")
+        self.cs1_unit_price_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.unit_price_var, state='disabled')
+			 
+        # e) cs1_Quantity
+        self.cs1_quantity_var = tk.StringVar()
+        self.cs1_quantity_label = ttk.Label(self.condition_state_1_frame, text="Quantity")
+        self.cs1_quantity_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.quantity_var, state='disabled')
+			 
         # Grid layout for Condition State 1 frame
-        self.bid_item_label.grid(row=0, column=0)
-        self.bid_item_dropdown.grid(row=0, column=1)
-        self.intervention_description_label.grid(row=1, column=0)
-        self.intervention_description_entry.grid(row=1, column=1)
-        self.unit_of_measure_label.grid(row=2, column=0)
-        self.unit_of_measure_entry.grid(row=2, column=1)
-        self.unit_price_label.grid(row=3, column=0)
-        self.unit_price_entry.grid(row=3, column=1)
-        self.quantity_label.grid(row=4, column=0)
-        self.quantity_entry.grid(row=4, column=1)
+        self.cs1_bid_item_label.grid(row=0, column=0)
+        self.cs1_bid_item_dropdown.grid(row=0, column=1)
+        self.cs1_intervention_description_label.grid(row=1, column=0)
+        self.cs1_intervention_description_entry.grid(row=1, column=1)
+        self.cs1_unit_of_measure_label.grid(row=2, column=0)
+        self.cs1_unit_of_measure_entry.grid(row=2, column=1)
+        self.cs1_unit_price_label.grid(row=3, column=0)
+        self.cs1_unit_price_entry.grid(row=3, column=1)
+        self.cs1_quantity_label.grid(row=4, column=0)
+        self.cs1_quantity_entry.grid(row=4, column=1)
         
         # Condition State 2
-        condition_state_2_label = ttk.Label(self.condition_state_2_frame, text="Condition State 2")
-        condition_state_2_label.pack()
+        self.condition_state_2_frame = ttk.LabelFrame(self, text="Condition State 2")
+        self.condition_state_2_frame.grid(column=2, row=0, padx=10, pady=10)
+
+        # a) BidItem
+        self.bid_item_2_var = tk.StringVar()
+        self.bid_item_2_label = ttk.Label(self.condition_state_2_frame, text="BidItem")
+        self.bid_item_2_dropdown = ttk.Combobox(self.condition_state_2_frame, textvariable=self.bid_item_2_var, state='disabled')
+        self.bid_item_2_dropdown.bind('<<ComboboxSelected>>', self.on_bid_item_2_selected)
+
+        # b) InterventionDescription
+        self.intervention_description_2_var = tk.StringVar()
+        self.intervention_description_2_label = ttk.Label(self.condition_state_2_frame, text="InterventionDescription")
+        self.intervention_description_2_entry = ttk.Entry(self.condition_state_2_frame, textvariable=self.intervention_description_2_var, state='disabled')
+
+        # c) UnitOfMeasure
+        self.unit_of_measure_2_var = tk.StringVar()
+        self.unit_of_measure_2_label = ttk.Label(self.condition_state_2_frame, text="UnitOfMeasure")
+        self.unit_of_measure_2_entry = ttk.Entry(self.condition_state_2_frame, textvariable=self.unit_of_measure_2_var, state='disabled')
+
+        # d) UnitPrice
+        self.unit_price_2_var = tk.StringVar()
+        self.unit_price_2_label = ttk.Label(self.condition_state_2_frame, text="UnitPrice")
+        self.unit_price_2_entry = ttk.Entry(self.condition_state_2_frame, textvariable=self.unit_price_2_var, state='disabled')
+
+        # e) Quantity
+        self.quantity_2_var = tk.StringVar()
+        self.quantity_2_label = ttk.Label(self.condition_state_2_frame, text="Quantity")
+        self.quantity_2_entry = ttk.Entry(self.condition_state_2_frame, textvariable=self.quantity_2_var, state='disabled')
+
+        # Grid layout for Condition State 2 frame
+        self.bid_item_2_label.grid(row=0, column=0)
+        self.bid_item_2_dropdown.grid(row=0, column=1)
+        self.intervention_description_2_label.grid(row=1, column=0)
+        self.intervention_description_2_entry.grid(row=1, column=1)
+        self.unit_of_measure_2_label.grid(row=2, column=0)
+        self.unit_of_measure_2_entry.grid(row=2, column=1)
+        self.unit_price_2_label.grid(row=3, column=0)
+        self.unit_price_2_entry.grid(row=3, column=1)
+        self.quantity_2_label.grid(row=4, column=0)
+        self.quantity_2_entry.grid(row=4, column=1)
+
         
         # Condition State 3
         condition_state_3_label = ttk.Label(self.condition_state_3_frame, text="Condition State 3")
@@ -157,6 +197,17 @@ class DynamicRow(ttk.Frame):
         self.unit_price_var.set(f'Price for {selected_bid_item}')
 
         self.quantity_entry['state'] = 'normal'  # enable Quantity entry
+
+    def on_bid_item_2_selected(self, event):
+        selected_bid_item = self.bid_item_2_var.get()
+
+        # You should replace the following lines with actual calls to your data source
+        # to fetch the corresponding data
+        self.intervention_description_2_var.set(f'Description for {selected_bid_item}')
+        self.unit_of_measure_2_var.set(f'Unit for {selected_bid_item}')
+        self.unit_price_2_var.set(f'Price for {selected_bid_item}')
+
+        self.quantity_2_entry['state'] = 'normal'  # enable Quantity entry
 
     
     
