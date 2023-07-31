@@ -21,6 +21,7 @@ class Application(tk.Tk):
 
         # Setting up the notebook (tab manager)
         self.notebook = ttk.Notebook(self)
+        
         self.homepage = Homepage(self, self.notebook)
         self.notebook.add(self.homepage, text="Homepage")
         self.notebook.pack(fill="both", expand=True)
@@ -44,5 +45,7 @@ class Application(tk.Tk):
 
 if __name__ == "__main__":
     app = Application()
+    app.title("Benefit Cost Ratio Application")
+    app.geometry('800x600')  # Set default width (800) and height (600)
     app.mainloop()
 
