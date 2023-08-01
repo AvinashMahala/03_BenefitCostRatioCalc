@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 from dynamic_row import DynamicRow
 
+
+
+
 class DeckTab(ttk.Frame):
     def __init__(self, container, controller, bridgeId, uuid, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
@@ -9,23 +12,11 @@ class DeckTab(ttk.Frame):
         self.bridgeId=bridgeId
         self.uuid=uuid
 
-        self.actions_area = ttk.LabelFrame(self, text="Actions Area")
-        self.actions_area.place(relx=0, rely=0, relwidth=1, relheight=0.1)
-
-        self.uuid_label_var = tk.StringVar(value=self.uuid)  # replace Placeholder with actual UUID
-        self.uuid_label = ttk.Label(self.actions_area, textvariable=self.uuid_label_var)
-        self.uuid_label.pack()
-
-        self.bridgeId_label_var = tk.StringVar(value=self.bridgeId)  # replace Placeholder with actual bridgeId
-        self.bridgeId_label = ttk.Label(self.actions_area, textvariable=self.bridgeId_label_var)
-        self.bridgeId_label.pack()
-
-        self.add_row_button = ttk.Button(self.actions_area, text="Add Row", command=self.add_row)
-        self.add_row_button.pack()
+        self.create_top_actions_area()
 
         # Create a Canvas for the Calculation Form Area
         self.calculation_form_area_canvas = tk.Canvas(self, borderwidth=0, background="#ffffff")
-        self.calculation_form_area_canvas.place(relx=0, rely=0.1, relwidth=1, relheight=0.8)
+        self.calculation_form_area_canvas.place(relx=0, rely=0.1, relwidth=1, relheight=0.7)
 
         # Create a Scrollbar and add it to the Calculation Form Area Canvas
         self.scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.calculation_form_area_canvas.yview)
@@ -54,6 +45,21 @@ class DeckTab(ttk.Frame):
         self.final_cost_label_var = tk.StringVar()
         self.final_cost_label = ttk.Label(self.final_cost_area, textvariable=self.final_cost_label_var)
         self.final_cost_label.pack()
+
+    def create_top_actions_area(self):
+        self.actions_area = ttk.LabelFrame(self, text="Actions Area")
+        self.actions_area.place(relx=0, rely=0, relwidth=1, relheight=0.2)
+
+        self.uuid_label_var = tk.StringVar(value=self.uuid)  # replace Placeholder with actual UUID
+        self.uuid_label = ttk.Label(self.actions_area, textvariable=self.uuid_label_var)
+        self.uuid_label.pack()
+
+        self.bridgeId_label_var = tk.StringVar(value=self.bridgeId)  # replace Placeholder with actual bridgeId
+        self.bridgeId_label = ttk.Label(self.actions_area, textvariable=self.bridgeId_label_var)
+        self.bridgeId_label.pack()
+
+        self.add_row_button = ttk.Button(self.actions_area, text="Add Row", command=self.add_row)
+        self.add_row_button.pack()
 
     def add_row(self):
         if len(self.dynamic_rows) >= 10:
