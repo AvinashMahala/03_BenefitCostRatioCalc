@@ -129,7 +129,8 @@ class DynamicRow(ttk.Frame):
         # b) InterventionDescription
         self.cs1_intervention_description_var = tk.StringVar()
         self.cs1_intervention_description_label = ttk.Label(self.condition_state_1_frame, text="InterventionDescription")
-        self.cs1_intervention_description_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.intervention_description_var, state='disabled')
+        self.cs1_intervention_description_entry = tk.Text(self.condition_state_1_frame, height=2, width=17, state='disabled')
+
 			 
         # c) cs1_UnitOfMeasure
         self.cs1_unit_of_measure_var = tk.StringVar()
@@ -171,7 +172,7 @@ class DynamicRow(ttk.Frame):
         # b) InterventionDescription
         self.intervention_description_2_var = tk.StringVar()
         self.intervention_description_2_label = ttk.Label(self.condition_state_2_frame, text="InterventionDescription")
-        self.intervention_description_2_entry = ttk.Entry(self.condition_state_2_frame, textvariable=self.intervention_description_2_var, state='disabled')
+        self.intervention_description_2_entry = tk.Text(self.condition_state_2_frame, height=2, width=17, state='disabled')
 
         # c) UnitOfMeasure
         self.unit_of_measure_2_var = tk.StringVar()
@@ -214,7 +215,7 @@ class DynamicRow(ttk.Frame):
         # b) InterventionDescription
         self.intervention_description_3_var = tk.StringVar()
         self.intervention_description_3_label = ttk.Label(self.condition_state_3_frame, text="InterventionDescription")
-        self.intervention_description_3_entry = ttk.Entry(self.condition_state_3_frame, textvariable=self.intervention_description_3_var, state='disabled')
+        self.intervention_description_3_entry = tk.Text(self.condition_state_3_frame, height=2, width=17, state='disabled')
 
         # c) UnitOfMeasure
         self.unit_of_measure_3_var = tk.StringVar()
@@ -258,7 +259,7 @@ class DynamicRow(ttk.Frame):
         # b) InterventionDescription
         self.intervention_description_4_var = tk.StringVar()
         self.intervention_description_4_label = ttk.Label(self.condition_state_4_frame, text="InterventionDescription")
-        self.intervention_description_4_entry = ttk.Entry(self.condition_state_4_frame, textvariable=self.intervention_description_4_var, state='disabled')
+        self.intervention_description_4_entry = tk.Text(self.condition_state_4_frame, height=2, width=17, state='disabled')
 
         # c) UnitOfMeasure
         self.unit_of_measure_4_var = tk.StringVar()
