@@ -11,12 +11,35 @@ class DeckTab(ttk.Frame):
         self.controller = controller
         self.bridgeId=bridgeId
         self.uuid=uuid
+        self.dynamic_rows = []
 
-        self.create_top_actions_area()
+        self.create_top_actions_area(0, 0, 1, 0.2)
+        self.create_scrollable_canvas(0, 0.1, 1, 0.7)
+        # for _ in range(1):  # replace with the actual number of rows you want
+        #     self.add_row()
 
+        self.create_bottom_total_cost_area(0, 0.9, 1, 0.1)
+
+
+    def create_top_actions_area(self, param_relx=0, param_rely=0, param_relwidth=1, param_relheight=0.2):
+        self.actions_area = ttk.LabelFrame(self, text="Actions Area")
+        self.actions_area.place(relx=param_relx, rely=param_rely, relwidth=param_relwidth, relheight=param_relheight)
+
+        self.uuid_label_var = tk.StringVar(value=self.uuid)  # replace Placeholder with actual UUID
+        self.uuid_label = ttk.Label(self.actions_area, textvariable=self.uuid_label_var)
+        self.uuid_label.pack()
+
+        self.bridgeId_label_var = tk.StringVar(value=self.bridgeId)  # replace Placeholder with actual bridgeId
+        self.bridgeId_label = ttk.Label(self.actions_area, textvariable=self.bridgeId_label_var)
+        self.bridgeId_label.pack()
+
+        self.add_row_button = ttk.Button(self.actions_area, text="Add Row", command=self.add_row)
+        self.add_row_button.pack()
+
+    def create_scrollable_canvas(self,param_relx=0, param_rely=0.1, param_relwidth=1, param_relheight=0.7):
         # Create a Canvas for the Calculation Form Area
         self.calculation_form_area_canvas = tk.Canvas(self, borderwidth=0, background="#ffffff")
-        self.calculation_form_area_canvas.place(relx=0, rely=0.1, relwidth=1, relheight=0.7)
+        self.calculation_form_area_canvas.place(relx=param_relx, rely=param_rely, relwidth=param_relwidth, relheight=param_relheight)
 
         # Create a Scrollbar and add it to the Calculation Form Area Canvas
         self.scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.calculation_form_area_canvas.yview)
@@ -32,12 +55,9 @@ class DeckTab(ttk.Frame):
         # Configure the Canvas to adjust the scroll region whenever the size of the inner Frame changes
         self.calculation_form_area.bind("<Configure>", self.on_frame_configure)
 
-        self.dynamic_rows = []
-        # for _ in range(1):  # replace with the actual number of rows you want
-        #     self.add_row()
-
+    def create_bottom_total_cost_area(self,param_relx=0, param_rely=0.9, param_relwidth=1, param_relheight=0.1):
         self.final_cost_area = ttk.LabelFrame(self, text="Final Cost Area")
-        self.final_cost_area.place(relx=0, rely=0.9, relwidth=1, relheight=0.1)
+        self.final_cost_area.place(relx=param_relx, rely=param_rely, relwidth=param_relwidth, relheight=param_relheight)
 
         self.calculate_final_cost_button = ttk.Button(self.final_cost_area, text="Calculate Final", command=self.calculate_final_cost)
         self.calculate_final_cost_button.pack()
@@ -45,21 +65,6 @@ class DeckTab(ttk.Frame):
         self.final_cost_label_var = tk.StringVar()
         self.final_cost_label = ttk.Label(self.final_cost_area, textvariable=self.final_cost_label_var)
         self.final_cost_label.pack()
-
-    def create_top_actions_area(self):
-        self.actions_area = ttk.LabelFrame(self, text="Actions Area")
-        self.actions_area.place(relx=0, rely=0, relwidth=1, relheight=0.2)
-
-        self.uuid_label_var = tk.StringVar(value=self.uuid)  # replace Placeholder with actual UUID
-        self.uuid_label = ttk.Label(self.actions_area, textvariable=self.uuid_label_var)
-        self.uuid_label.pack()
-
-        self.bridgeId_label_var = tk.StringVar(value=self.bridgeId)  # replace Placeholder with actual bridgeId
-        self.bridgeId_label = ttk.Label(self.actions_area, textvariable=self.bridgeId_label_var)
-        self.bridgeId_label.pack()
-
-        self.add_row_button = ttk.Button(self.actions_area, text="Add Row", command=self.add_row)
-        self.add_row_button.pack()
 
     def add_row(self):
         if len(self.dynamic_rows) >= 10:
