@@ -12,9 +12,12 @@ class DeckTab(ttk.Frame):
         self.bridgeId=bridgeId
         self.uuid=uuid
         self.dynamic_rows = []
+        self.calculation_form_area_canvas=None
 
         self.create_top_actions_area(0, 0, 1, 0.2)
-        self.create_scrollable_canvas(0, 0.1, 1, 0.7)
+        self.create_scrollable_canvas(0, 0.2, 0.98, 0.6)
+        self.create_vertical_scroll(0.98, 0.2, 0.02, 0.6)
+        self.create_horizontal_scroll(0,0.8,0.98,0.1)
         # for _ in range(1):  # replace with the actual number of rows you want
         #     self.add_row()
 
@@ -41,19 +44,25 @@ class DeckTab(ttk.Frame):
         self.calculation_form_area_canvas = tk.Canvas(self, borderwidth=0, background="#ffffff")
         self.calculation_form_area_canvas.place(relx=param_relx, rely=param_rely, relwidth=param_relwidth, relheight=param_relheight)
 
-        # Create a Scrollbar and add it to the Calculation Form Area Canvas
-        self.scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.calculation_form_area_canvas.yview)
-        self.scrollbar.pack(side="right", fill="y")
-
-        # Configure the Canvas to use the Scrollbar
-        self.calculation_form_area_canvas.configure(yscrollcommand=self.scrollbar.set)
-        
         # Create a Frame inside the Canvas
-        self.calculation_form_area = ttk.LabelFrame(self.calculation_form_area_canvas, text="Calculation Form Area")
-        self.calculation_form_area_window = self.calculation_form_area_canvas.create_window((0,0), window=self.calculation_form_area, anchor='nw')
-        
-        # Configure the Canvas to adjust the scroll region whenever the size of the inner Frame changes
-        self.calculation_form_area.bind("<Configure>", self.on_frame_configure)
+        self.calculation_form_area = ttk.Frame(self.calculation_form_area_canvas, width=1)
+        self.calculation_form_area_window = self.calculation_form_area_canvas.create_window((0, 0), window=self.calculation_form_area, anchor='nw')
+
+        # Bind canvas resize to update the scrollable area
+        self.bind("<Configure>", self.on_canvas_configure)
+
+    def create_horizontal_scroll(self, parax_relx=0,param_rely=0.1, param_relwidth=1,param_relheight=0.1):
+        # Create Horizontal Scrollbar and add it to the Calculation Form Area Canvas
+        self.horizontal_scrollbar = ttk.Scrollbar(self, orient="horizontal", command=self.calculation_form_area_canvas.xview)
+        self.horizontal_scrollbar.place(relx=parax_relx, rely=param_rely, relwidth=param_relwidth, relheight=param_relheight)
+        self.calculation_form_area_canvas.configure(xscrollcommand=self.horizontal_scrollbar.set)
+
+    def create_vertical_scroll(self, parax_relx=0, param_rely=0.1, param_relwidth=0.1, param_relheight=1):
+        # Create Vertical Scrollbar and add it to the Calculation Form Area Canvas
+        self.vertical_scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.calculation_form_area_canvas.yview)
+        self.vertical_scrollbar.place(relx=parax_relx, rely=param_rely, relwidth=param_relwidth, relheight=param_relheight)
+        self.calculation_form_area_canvas.configure(yscrollcommand=self.vertical_scrollbar.set)
+
 
     def create_bottom_total_cost_area(self,param_relx=0, param_rely=0.9, param_relwidth=1, param_relheight=0.1):
         self.final_cost_area = ttk.LabelFrame(self, text="Final Cost Area")
@@ -71,7 +80,7 @@ class DeckTab(ttk.Frame):
             tk.messagebox.showerror("Error", "Cannot add more than 10 rows.")
             return
 
-        row = DynamicRow(self.calculation_form_area, self.controller,self.bridgeId,self.uuid,)
+        row = DynamicRow(self ,self.calculation_form_area, self.controller,self.bridgeId,self.uuid,)
         row.pack()
         self.dynamic_rows.append(row)
 
@@ -79,8 +88,7 @@ class DeckTab(ttk.Frame):
         final_cost = sum(row.calculate_cost() for row in self.dynamic_rows)
         self.final_cost_label_var.set(f"Final Cost: {final_cost}")
 
-    def on_frame_configure(self, event):
-        # Reset the scroll region to encompass the inner frame
+
+    def on_canvas_configure(self, event):
+        # Update the scroll region to reflect the size of the canvas content
         self.calculation_form_area_canvas.configure(scrollregion=self.calculation_form_area_canvas.bbox("all"))
-        # Update the width of the calculation_form_area
-        self.calculation_form_area_canvas.itemconfig(self.calculation_form_area_window, width=self.calculation_form_area_canvas.winfo_width())

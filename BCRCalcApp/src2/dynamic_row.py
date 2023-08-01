@@ -3,9 +3,10 @@ from tkinter import ttk
 
 
 class DynamicRow(ttk.Frame):
-    def __init__(self, container, controller,bridgeId,uuid, *args, **kwargs):
+    def __init__(self, master, container, controller,bridgeId,uuid, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
         self.controller = controller
+        self.master=master
         self.bridgeId=bridgeId
         self.uuid=uuid
 
