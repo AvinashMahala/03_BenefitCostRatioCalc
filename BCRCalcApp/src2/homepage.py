@@ -14,11 +14,17 @@ class Homepage(ttk.Frame):
         self.bridgeId=""
 
     def create_widgets(self):
-        self.start_calculation_area = ttk.LabelFrame(self, text="Start Calculation Area")
-        self.start_calculation_area.pack(fill="both", expand=True)
-        self.bridge_id_entry = ttk.Entry(self.start_calculation_area)
+        self.homepage_area = ttk.LabelFrame(self, text="HomePage Area")
+        self.homepage_area.pack(fill="both", expand=True)
+
+        self.bridgeId_label_var = tk.StringVar(value="Input Bridge ID")  
+        self.bridgeId_label = ttk.Label(self.homepage_area, textvariable=self.bridgeId_label_var)
+        self.bridgeId_label.pack()
+
+        self.bridge_id_entry = ttk.Entry(self.homepage_area)
         self.bridge_id_entry.pack()
-        self.calculation_button = ttk.Button(self.start_calculation_area, text="Generate Unique Calculation", command=self.generate_calculation)
+
+        self.calculation_button = ttk.Button(self.homepage_area, text="Generate Unique Calculation", command=self.generate_calculation)
         self.calculation_button.pack()
 
     def generate_calculation(self):

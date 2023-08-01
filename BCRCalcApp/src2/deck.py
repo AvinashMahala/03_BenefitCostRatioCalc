@@ -3,7 +3,7 @@ from tkinter import ttk
 from dynamic_row import DynamicRow
 
 class DeckTab(ttk.Frame):
-    def __init__(self, container, controller,bridgeId,uuid, *args, **kwargs):
+    def __init__(self, container, controller, bridgeId, uuid, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
         self.controller = controller
         self.bridgeId=bridgeId
