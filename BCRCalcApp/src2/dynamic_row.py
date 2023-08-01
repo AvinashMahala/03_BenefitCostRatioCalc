@@ -123,7 +123,7 @@ class DynamicRow(ttk.Frame):
         # a) BidItem
         self.cs1_bid_item_var = tk.StringVar()
         self.cs1_bid_item_label = ttk.Label(self.condition_state_1_frame, text="BidItem")
-        self.cs1_bid_item_dropdown = ttk.Combobox(self.condition_state_1_frame, textvariable=self.bid_item_var, state='disabled')
+        self.cs1_bid_item_dropdown = ttk.Combobox(self.condition_state_1_frame, textvariable=self.cs1_bid_item_var, state='disabled')
         self.cs1_bid_item_dropdown.bind('<<ComboboxSelected>>', self.on_bid_item_selected)
 
         # b) InterventionDescription
@@ -395,9 +395,9 @@ class DynamicRow(ttk.Frame):
             self.element_type_entry['state'] = 'disabled'
 
     def on_defect_name_selected(self, event):
-        selected_option = self.defect_name_var.get().strip()
+        selected_defect_name = self.defect_name_var.get().strip()
 
-        if(selected_option!="None"):
+        if(selected_defect_name!="None"):
             self.total_quantity_entry['state']='normal'
             self.units_dropdown['state']='readonly'
         else:
@@ -405,22 +405,59 @@ class DynamicRow(ttk.Frame):
             self.units_var.set('')
             self.total_quantity_entry['state']='readonly'
             self.units_dropdown['state']='disabled'
-        self.set_condition_state_One_Fields(selected_option)
-        self.set_condition_state_Two_Fields(selected_option)
-        self.set_condition_state_Three_Fields(selected_option)
-        self.set_condition_state_Four_Fields(selected_option)
+        self.set_condition_state_One_Fields(selected_defect_name)
+        self.set_condition_state_Two_Fields(selected_defect_name)
+        self.set_condition_state_Three_Fields(selected_defect_name)
+        self.set_condition_state_Four_Fields(selected_defect_name)
 
-    def set_condition_state_One_Fields(self,selected_option):
-        self.cs1_bid_item_dropdown['state']='normal'
+    def set_condition_state_One_Fields(self,selected_defect_name):
+        defect_bid_items_str=self.DeckDefectsState1[selected_defect_name]
+        self.cs1_bid_item_var=""
+        if(defect_bid_items_str=="None"):
+            self.cs1_bid_item_dropdown['values']=["None"]
+            self.cs1_bid_item_var="None"
+            self.cs1_bid_item_dropdown['state']='readonly'
+            
+        else:
+            valuesList=defect_bid_items_str.split(",")
+            self.cs1_bid_item_dropdown['values']=valuesList
 
-    def set_condition_state_Two_Fields(self,selected_option):
-        self.bid_item_2_dropdown['state']='normal'
 
-    def set_condition_state_Three_Fields(self,selected_option):
-        self.bid_item_3_dropdown['state']='normal'
+    def set_condition_state_Two_Fields(self,selected_defect_name):
+        defect_bid_items_str=self.DeckDefectsState2[selected_defect_name]
+        self.bid_item_2_var=""
+        if(defect_bid_items_str=="None"):
+            self.bid_item_2_dropdown['values']=["None"]
+            self.bid_item_2_var="None"
+            self.bid_item_2_dropdown['state']='readonly'
+            
+        else:
+            valuesList=defect_bid_items_str.split(",")
+            self.bid_item_2_dropdown['values']=valuesList
 
-    def set_condition_state_Four_Fields(self,selected_option):
-        self.bid_item_4_dropdown['state']='normal'
+    def set_condition_state_Three_Fields(self,selected_defect_name):
+        defect_bid_items_str=self.DeckDefectsState3[selected_defect_name]
+        self.bid_item_3_var=""
+        if(defect_bid_items_str=="None"):
+            self.bid_item_3_dropdown['values']=["None"]
+            self.bid_item_3_var="None"
+            self.bid_item_3_dropdown['state']='readonly'
+            
+        else:
+            valuesList=defect_bid_items_str.split(",")
+            self.bid_item_3_dropdown['values']=valuesList
+
+    def set_condition_state_Four_Fields(self,selected_defect_name):
+        defect_bid_items_str=self.DeckDefectsState4[selected_defect_name]
+        self.bid_item_4_var=""
+        if(defect_bid_items_str=="None"):
+            self.bid_item_4_dropdown['values']=["None"]
+            self.bid_item_4_var="None"
+            self.bid_item_4_dropdown['state']='readonly'
+            
+        else:
+            valuesList=defect_bid_items_str.split(",")
+            self.bid_item_4_dropdown['values']=valuesList
 
 
     def on_element_type_selected(self, event):
