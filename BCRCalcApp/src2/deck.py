@@ -42,8 +42,8 @@ class DeckTab(ttk.Frame):
         self.calculation_form_area.bind("<Configure>", self.on_frame_configure)
 
         self.dynamic_rows = []
-        for _ in range(1):  # replace with the actual number of rows you want
-            self.add_row()
+        # for _ in range(1):  # replace with the actual number of rows you want
+        #     self.add_row()
 
         self.final_cost_area = ttk.LabelFrame(self, text="Final Cost Area")
         self.final_cost_area.place(relx=0, rely=0.9, relwidth=1, relheight=0.1)
@@ -60,7 +60,7 @@ class DeckTab(ttk.Frame):
             tk.messagebox.showerror("Error", "Cannot add more than 10 rows.")
             return
 
-        row = DynamicRow(self.calculation_form_area, self.controller)
+        row = DynamicRow(self.calculation_form_area, self.controller,self.bridgeId,self.uuid,)
         row.pack()
         self.dynamic_rows.append(row)
 
