@@ -3,8 +3,6 @@ from tkinter import ttk
 from dynamic_row import DynamicRow
 
 
-
-
 class DeckTab(ttk.Frame):
     def __init__(self, container, controller, bridgeId, uuid, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
@@ -28,10 +26,14 @@ class DeckTab(ttk.Frame):
         self.actions_area = ttk.LabelFrame(self, text="Actions Area")
         self.actions_area.place(relx=param_relx, rely=param_rely, relwidth=param_relwidth, relheight=param_relheight)
 
+        self.uuid_label_caption = ttk.Label(self.actions_area, text="UUID")
+        self.uuid_label_caption.pack()
         self.uuid_label_var = tk.StringVar(value=self.uuid)  # replace Placeholder with actual UUID
         self.uuid_label = ttk.Label(self.actions_area, textvariable=self.uuid_label_var)
         self.uuid_label.pack()
 
+        self.bridgeId_label_caption = ttk.Label(self.actions_area, text="BridgeID")
+        self.bridgeId_label_caption.pack()
         self.bridgeId_label_var = tk.StringVar(value=self.bridgeId)  # replace Placeholder with actual bridgeId
         self.bridgeId_label = ttk.Label(self.actions_area, textvariable=self.bridgeId_label_var)
         self.bridgeId_label.pack()

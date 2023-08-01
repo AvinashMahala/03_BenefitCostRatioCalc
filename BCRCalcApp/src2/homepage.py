@@ -28,11 +28,18 @@ class Homepage(ttk.Frame):
         self.calculation_button.pack()
 
     def generate_calculation(self):
-        bridge_id = self.bridge_id_entry.get()
+        bridge_id = self.bridge_id_entry.get().strip()
+        
+        # Check if bridge_id is empty after stripping white spaces
+        if not bridge_id:
+            self.master.show_msg("Error: Bridge ID cannot be empty or spaces only.")
+            return
+
         unique_id = str(uuid.uuid4())
         self.uuid=unique_id
         self.bridgeId=bridge_id
         self.master.database.insert_calculation_metadata(bridge_id, unique_id)
         self.master.activate_tabs(bridge_id, unique_id)
         self.master.show_msg(f"Successfully stored the Bridge ID: {bridge_id} and UUID: {unique_id}")
+
 
