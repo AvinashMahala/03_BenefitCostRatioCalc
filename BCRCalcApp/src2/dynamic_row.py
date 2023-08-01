@@ -402,17 +402,17 @@ class DynamicRow(ttk.Frame):
         self.set_condition_state_Three_Fields(selected_option)
         self.set_condition_state_Four_Fields(selected_option)
 
-    def set_condition_state_One_Fields(self):
-        pass
+    def set_condition_state_One_Fields(self,selected_option):
+        self.cs1_bid_item_dropdown['state']='normal'
 
-    def set_condition_state_Two_Fields(self):
-        pass
+    def set_condition_state_Two_Fields(self,selected_option):
+        self.bid_item_2_dropdown['state']='normal'
 
-    def set_condition_state_Three_Fields(self):
-        pass
+    def set_condition_state_Three_Fields(self,selected_option):
+        self.bid_item_3_dropdown['state']='normal'
 
-    def set_condition_state_Four_Fields(self):
-        pass
+    def set_condition_state_Four_Fields(self,selected_option):
+        self.bid_item_4_dropdown['state']='normal'
 
 
     def on_element_type_selected(self, event):
