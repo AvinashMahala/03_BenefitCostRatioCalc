@@ -45,9 +45,12 @@ class DynamicRow(ttk.Frame):
         self.bridge_info_frame = ttk.LabelFrame(self, text="Bridge Information")
         self.bridge_info_frame.grid(column=0, row=0, padx=10, pady=10)
         # 1) 2 disabled text boxes displaying active bridge id and uuid.
-        self.bridge_id_var = tk.StringVar(value=self.bridgeId)  # replace with actual value
-        self.bridge_uuid_var = tk.StringVar(value=self.uuid)  # replace with actual value
+        self.bridge_id_label = ttk.Label(self.bridge_info_frame, text="Bridge ID")
+        self.bridge_id_var = tk.StringVar(value=self.bridgeId)  
         self.bridge_id_entry = ttk.Entry(self.bridge_info_frame, textvariable=self.bridge_id_var, state='disabled')
+
+        self.bridge_uuid_label = ttk.Label(self.bridge_info_frame, text="Calculation UUID")
+        self.bridge_uuid_var = tk.StringVar(value=self.uuid)
         self.bridge_uuid_entry = ttk.Entry(self.bridge_info_frame, textvariable=self.bridge_uuid_var, state='disabled')
 
         # 2) Input Box with label "Element Num" - It is a dropdown containing some values.
@@ -78,8 +81,12 @@ class DynamicRow(ttk.Frame):
         self.units_entry = ttk.Entry(self.bridge_info_frame, textvariable=self.units_var, state='disabled')
 
         # Grid layout
+        self.bridge_id_label.grid(row=0,column=0)
         self.bridge_id_entry.grid(row=0, column=1)
+
+        self.bridge_uuid_label.grid(row=1,column=0)
         self.bridge_uuid_entry.grid(row=1, column=1)
+        
         self.element_num_label.grid(row=2, column=0)
         self.element_num_dropdown.grid(row=2, column=1)
         self.element_type_label.grid(row=3, column=0)
