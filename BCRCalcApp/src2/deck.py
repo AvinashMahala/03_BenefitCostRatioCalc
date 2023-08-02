@@ -85,6 +85,8 @@ class DeckTab(ttk.Frame):
         row = DynamicRow(self ,self.calculation_form_area, self.controller,self.bridgeId,self.uuid,)
         row.pack()
         self.dynamic_rows.append(row)
+        self.on_canvas_configure(None)
+
 
     def calculate_final_cost(self):
         final_cost = sum(row.calculate_cost() for row in self.dynamic_rows)
