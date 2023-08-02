@@ -171,7 +171,7 @@ class DynamicRow(ttk.Frame):
         # b) InterventionDescription
         self.cs1_intervention_description_var = tk.StringVar()
         self.cs1_intervention_description_label = ttk.Label(self.condition_state_1_frame, text="InterventionDescription")
-        self.cs1_intervention_description_entry = tk.Text(self.condition_state_1_frame,wrap=tk.WORD, height=2, width=17, state='disabled')
+        self.cs1_intervention_description_entry = ttk.Entry(self.condition_state_1_frame,textvariable=self.cs1_intervention_description_var, state='disabled')
 
 			 
         # c) cs1_UnitOfMeasure
@@ -214,7 +214,7 @@ class DynamicRow(ttk.Frame):
         # b) InterventionDescription
         self.intervention_description_2_var = tk.StringVar()
         self.intervention_description_2_label = ttk.Label(self.condition_state_2_frame, text="InterventionDescription")
-        self.intervention_description_2_entry = tk.Text(self.condition_state_2_frame, height=2, width=17, state='disabled')
+        self.intervention_description_2_entry = ttk.Entry(self.condition_state_2_frame, textvariable=self.intervention_description_2_var, state='disabled')
 
         # c) UnitOfMeasure
         self.unit_of_measure_2_var = tk.StringVar()
@@ -257,7 +257,7 @@ class DynamicRow(ttk.Frame):
         # b) InterventionDescription
         self.intervention_description_3_var = tk.StringVar()
         self.intervention_description_3_label = ttk.Label(self.condition_state_3_frame, text="InterventionDescription")
-        self.intervention_description_3_entry = tk.Text(self.condition_state_3_frame, height=2, width=17, state='disabled')
+        self.intervention_description_3_entry = ttk.Entry(self.condition_state_3_frame,textvariable=self.intervention_description_3_var, state='disabled')
 
         # c) UnitOfMeasure
         self.unit_of_measure_3_var = tk.StringVar()
@@ -301,7 +301,7 @@ class DynamicRow(ttk.Frame):
         # b) InterventionDescription
         self.intervention_description_4_var = tk.StringVar()
         self.intervention_description_4_label = ttk.Label(self.condition_state_4_frame, text="InterventionDescription")
-        self.intervention_description_4_entry = tk.Text(self.condition_state_4_frame, height=2, width=17, state='disabled')
+        self.intervention_description_4_entry = ttk.Entry(self.condition_state_4_frame,textvariable=self.intervention_description_4_var, state='disabled')
 
         # c) UnitOfMeasure
         self.unit_of_measure_4_var = tk.StringVar()
@@ -413,25 +413,37 @@ class DynamicRow(ttk.Frame):
 
     def on_bid_item_3_selected(self, event):
         selected_bid_item = self.bid_item_3_var.get()
+        # print(selected_bid_item)
+        cs=retrieve_data_by_bid_item_num(selected_bid_item)
+        # print(cs)
 
-        # You should replace the following lines with actual calls to your data source
-        # to fetch the corresponding data
-        self.intervention_description_3_var.set(f'Description for {selected_bid_item}')
-        self.unit_of_measure_3_var.set(f'Unit for {selected_bid_item}')
-        self.unit_price_3_var.set(f'Price for {selected_bid_item}')
+        description = cs.bid_item_description  # Replace this with a function call to fetch description from the database
+        self.intervention_description_3_var.set(description)
 
-        self.quantity_3_entry['state'] = 'normal'  # enable Quantity entry
+        unit_of_measure = cs.unit_of_measure  # Replace this with a function call to fetch unit of measure from the database
+        self.unit_of_measure_3_var.set(unit_of_measure)
+
+        unit_price = cs.avg_unit_price  # Replace this with a function call to fetch unit price from the database
+        self.unit_price_3_var.set(unit_price)
+
+        self.quantity_3_entry['state'] = 'normal'
     
     def on_bid_item_4_selected(self, event):
         selected_bid_item = self.bid_item_4_var.get()
+        # print(selected_bid_item)
+        cs=retrieve_data_by_bid_item_num(selected_bid_item)
+        # print(cs)
 
-        # You should replace the following lines with actual calls to your data source
-        # to fetch the corresponding data
-        self.intervention_description_4_var.set(f'Description for {selected_bid_item}')
-        self.unit_of_measure_4_var.set(f'Unit for {selected_bid_item}')
-        self.unit_price_4_var.set(f'Price for {selected_bid_item}')
+        description = cs.bid_item_description  # Replace this with a function call to fetch description from the database
+        self.intervention_description_4_var.set(description)
 
-        self.quantity_4_entry['state'] = 'normal'  # enable Quantity entry
+        unit_of_measure = cs.unit_of_measure  # Replace this with a function call to fetch unit of measure from the database
+        self.unit_of_measure_4_var.set(unit_of_measure)
+
+        unit_price = cs.avg_unit_price  # Replace this with a function call to fetch unit price from the database
+        self.unit_price_4_var.set(unit_price)
+
+        self.quantity_4_entry['state'] = 'normal'
 
     def on_element_num_selected(self, event):
         selected_option = self.element_num_var.get()
@@ -540,6 +552,7 @@ class DynamicRow(ttk.Frame):
 
         description = cs.bid_item_description  # Replace this with a function call to fetch description from the database
         self.cs1_intervention_description_entry.insert(tk.END, description)
+        self.cs1_intervention_description_var.set(description)
 
         unit_of_measure = cs.unit_of_measure  # Replace this with a function call to fetch unit of measure from the database
         self.unit_of_measure_var.set(unit_of_measure)
