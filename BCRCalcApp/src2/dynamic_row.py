@@ -3,6 +3,48 @@ from tkinter import ttk
 from ElementNumberNameMData import DeckElementsMData
 from DeckDefectsMData import DefectDatabase
 from DeckUnitsMData import DeckUnitsDB
+from ConditionStateData import ConditionStateData
+import sqlite3
+
+
+
+def retrieve_data_by_bid_item_num(bid_item_num):
+    # Connect to the SQLite database
+    db_file = './BenefitCostRatioApp.db'
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+
+    try:
+       
+        table_name = 'BidItemPriceTxDot'
+        
+        # Execute the query with the provided bid_item_num
+        query = "SELECT BidItemDesc, UnitOfMeas, AvgUnitPrice " \
+            "FROM BidItemPriceTxDot " \
+            "WHERE BidItemNum = ?;"
+        
+        # Execute the query
+        cursor.execute(query, (bid_item_num,))
+        
+        # Fetch the data
+        data = cursor.fetchone()
+        # print(data)
+        cs="None"
+        if data:
+            # Create and return a ConditionStateData object with the retrieved data
+            bid_item_description, unit_of_measure, avg_unit_price = data
+            cs=ConditionStateData(bid_item_num, bid_item_description, unit_of_measure, avg_unit_price)
+        return cs
+            
+    except sqlite3.Error as e:
+        print("Error reading data from the database:", e)
+
+    finally:
+        # Close the database connection
+        conn.close()
+
+
 
 class DynamicRow(ttk.Frame):
     def __init__(self, master, container, controller,bridgeId,uuid, *args, **kwargs):
@@ -123,13 +165,13 @@ class DynamicRow(ttk.Frame):
         # a) BidItem
         self.cs1_bid_item_var = tk.StringVar()
         self.cs1_bid_item_label = ttk.Label(self.condition_state_1_frame, text="BidItem")
-        self.cs1_bid_item_dropdown = ttk.Combobox(self.condition_state_1_frame, textvariable=self.cs1_bid_item_var, state='disabled')
+        self.cs1_bid_item_dropdown = ttk.Combobox(self.condition_state_1_frame, textvariable=self.cs1_bid_item_var, state='readonly')
         self.cs1_bid_item_dropdown.bind('<<ComboboxSelected>>', self.on_bid_item_selected)
 
         # b) InterventionDescription
         self.cs1_intervention_description_var = tk.StringVar()
         self.cs1_intervention_description_label = ttk.Label(self.condition_state_1_frame, text="InterventionDescription")
-        self.cs1_intervention_description_entry = tk.Text(self.condition_state_1_frame, height=2, width=17, state='disabled')
+        self.cs1_intervention_description_entry = tk.Text(self.condition_state_1_frame,wrap=tk.WORD, height=2, width=17, state='disabled')
 
 			 
         # c) cs1_UnitOfMeasure
@@ -166,7 +208,7 @@ class DynamicRow(ttk.Frame):
         # a) BidItem
         self.bid_item_2_var = tk.StringVar()
         self.bid_item_2_label = ttk.Label(self.condition_state_2_frame, text="BidItem")
-        self.bid_item_2_dropdown = ttk.Combobox(self.condition_state_2_frame, textvariable=self.bid_item_2_var, state='disabled')
+        self.bid_item_2_dropdown = ttk.Combobox(self.condition_state_2_frame, textvariable=self.bid_item_2_var, state='readonly')
         self.bid_item_2_dropdown.bind('<<ComboboxSelected>>', self.on_bid_item_2_selected)
 
         # b) InterventionDescription
@@ -337,27 +379,37 @@ class DynamicRow(ttk.Frame):
             print("Invalid quantity or unit price")
 
 
-    def on_bid_item_selected(self, event):
-        selected_bid_item = self.bid_item_var.get()
+    # def on_bid_item_selected(self, event):
+    #     selected_bid_item = self.bid_item_var.get()
 
-        # You should replace the following lines with actual calls to your data source
-        # to fetch the corresponding data
-        self.intervention_description_var.set(f'Description for {selected_bid_item}')
-        self.unit_of_measure_var.set(f'Unit for {selected_bid_item}')
-        self.unit_price_var.set(f'Price for {selected_bid_item}')
+    #     # You should replace the following lines with actual calls to your data source
+    #     # to fetch the corresponding data
 
-        self.quantity_entry['state'] = 'normal'  # enable Quantity entry
+    #     cs=retrieve_data_by_bid_item_num(selected_bid_item)
+    #     self.cs1_quantity_entry['state'] = 'normal'  # enable Quantity entry
+
+    #     self.intervention_description_var.set(f'Description for {selected_bid_item}')
+    #     self.unit_of_measure_var.set(f'Unit for {selected_bid_item}')
+    #     self.unit_price_var.set(f'Price for {selected_bid_item}')
+
+        
 
     def on_bid_item_2_selected(self, event):
         selected_bid_item = self.bid_item_2_var.get()
+        # print(selected_bid_item)
+        cs=retrieve_data_by_bid_item_num(selected_bid_item)
+        # print(cs)
 
-        # You should replace the following lines with actual calls to your data source
-        # to fetch the corresponding data
-        self.intervention_description_2_var.set(f'Description for {selected_bid_item}')
-        self.unit_of_measure_2_var.set(f'Unit for {selected_bid_item}')
-        self.unit_price_2_var.set(f'Price for {selected_bid_item}')
+        description = cs.bid_item_description  # Replace this with a function call to fetch description from the database
+        self.intervention_description_2_var.set(description)
 
-        self.quantity_2_entry['state'] = 'normal'  # enable Quantity entry
+        unit_of_measure = cs.unit_of_measure  # Replace this with a function call to fetch unit of measure from the database
+        self.unit_of_measure_2_var.set(unit_of_measure)
+
+        unit_price = cs.avg_unit_price  # Replace this with a function call to fetch unit price from the database
+        self.unit_price_2_var.set(unit_price)
+
+        self.quantity_2_entry['state'] = 'normal'
 
     def on_bid_item_3_selected(self, event):
         selected_bid_item = self.bid_item_3_var.get()
@@ -413,10 +465,10 @@ class DynamicRow(ttk.Frame):
 
     def set_condition_state_One_Fields(self,selected_defect_name):
         defect_bid_items_str=self.DeckDefectsState1[selected_defect_name]
-        self.cs1_bid_item_var=""
+        # self.cs1_bid_item_var=""
         if(defect_bid_items_str=="None"):
             self.cs1_bid_item_dropdown['values']=["None"]
-            self.cs1_bid_item_var="None"
+            # self.cs1_bid_item_var="None"
             self.cs1_bid_item_dropdown['state']='readonly'
             
         else:
@@ -427,10 +479,10 @@ class DynamicRow(ttk.Frame):
 
     def set_condition_state_Two_Fields(self,selected_defect_name):
         defect_bid_items_str=self.DeckDefectsState2[selected_defect_name]
-        self.bid_item_2_var=""
+        # self.bid_item_2_var=""
         if(defect_bid_items_str=="None"):
             self.bid_item_2_dropdown['values']=["None"]
-            self.bid_item_2_var="None"
+            # self.bid_item_2_var="None"
             self.bid_item_2_dropdown['state']='readonly'
             
         else:
@@ -440,10 +492,10 @@ class DynamicRow(ttk.Frame):
 
     def set_condition_state_Three_Fields(self,selected_defect_name):
         defect_bid_items_str=self.DeckDefectsState3[selected_defect_name]
-        self.bid_item_3_var=""
+        # self.bid_item_3_var=""
         if(defect_bid_items_str=="None"):
             self.bid_item_3_dropdown['values']=["None"]
-            self.bid_item_3_var="None"
+            # self.bid_item_3_var="None"
             self.bid_item_3_dropdown['state']='readonly'
             
         else:
@@ -453,10 +505,10 @@ class DynamicRow(ttk.Frame):
 
     def set_condition_state_Four_Fields(self,selected_defect_name):
         defect_bid_items_str=self.DeckDefectsState4[selected_defect_name]
-        self.bid_item_4_var=""
+        # self.bid_item_4_var=""
         if(defect_bid_items_str=="None"):
             self.bid_item_4_dropdown['values']=["None"]
-            self.bid_item_4_var="None"
+            # self.bid_item_4_var="None"
             self.bid_item_4_dropdown['state']='readonly'
             
         else:
@@ -481,18 +533,21 @@ class DynamicRow(ttk.Frame):
         pass
 
     def on_bid_item_selected(self, event):
-        bid_item = self.bid_item_var.get()
+        selected_bid_item = self.cs1_bid_item_var.get()
+        print(selected_bid_item)
+        cs=retrieve_data_by_bid_item_num(selected_bid_item)
+        print(cs)
 
-        description = 'Demo Description'  # Replace this with a function call to fetch description from the database
-        self.intervention_description_var.set(description)
+        description = cs.bid_item_description  # Replace this with a function call to fetch description from the database
+        self.cs1_intervention_description_entry.insert(tk.END, description)
 
-        unit_of_measure = 'Demo Unit'  # Replace this with a function call to fetch unit of measure from the database
+        unit_of_measure = cs.unit_of_measure  # Replace this with a function call to fetch unit of measure from the database
         self.unit_of_measure_var.set(unit_of_measure)
 
-        unit_price = '10.00'  # Replace this with a function call to fetch unit price from the database
+        unit_price = cs.avg_unit_price  # Replace this with a function call to fetch unit price from the database
         self.unit_price_var.set(unit_price)
 
-        self.quantity_entry['state'] = 'normal'
+        self.cs1_quantity_entry['state'] = 'normal'
 
     def calculate_cost(self):
         # Replace with your actual calculation logic
