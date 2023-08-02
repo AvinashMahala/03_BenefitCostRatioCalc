@@ -421,6 +421,7 @@ class DynamicRow(ttk.Frame):
             
         else:
             valuesList=defect_bid_items_str.split(",")
+            self.cs1_bid_item_dropdown['state']='readonly'
             self.cs1_bid_item_dropdown['values']=valuesList
 
 
@@ -434,6 +435,7 @@ class DynamicRow(ttk.Frame):
             
         else:
             valuesList=defect_bid_items_str.split(",")
+            self.bid_item_2_dropdown['state']='readonly'
             self.bid_item_2_dropdown['values']=valuesList
 
     def set_condition_state_Three_Fields(self,selected_defect_name):
@@ -446,6 +448,7 @@ class DynamicRow(ttk.Frame):
             
         else:
             valuesList=defect_bid_items_str.split(",")
+            self.bid_item_3_dropdown['state']='readonly'
             self.bid_item_3_dropdown['values']=valuesList
 
     def set_condition_state_Four_Fields(self,selected_defect_name):
@@ -458,6 +461,7 @@ class DynamicRow(ttk.Frame):
             
         else:
             valuesList=defect_bid_items_str.split(",")
+            self.bid_item_4_dropdown['state']='readonly'
             self.bid_item_4_dropdown['values']=valuesList
 
 
