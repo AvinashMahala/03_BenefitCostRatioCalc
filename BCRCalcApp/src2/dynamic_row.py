@@ -197,7 +197,7 @@ class DynamicRow(ttk.Frame):
         self.cs1_sub_total_entry_var = tk.StringVar()
         # self.cs1_sub_total_entry_var = "$ 0"
         # self.cs1_quantity_label = ttk.Label(self.condition_state_1_frame, text="Quantity")
-        self.cs1_sub_total_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.cs1_sub_total_entry_var, state='normal')
+        self.cs1_sub_total_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.cs1_sub_total_entry_var, state='readonly')
 
 
 
@@ -384,13 +384,17 @@ class DynamicRow(ttk.Frame):
         remove_row_button.pack()
 
 
-        calculate_button = ttk.Button(self.actions_frame, text="Calculate", command=self.calculate_cost)
-        calculate_button.pack()
+        self.calculate_button = ttk.Button(self.actions_frame, text="Calculate", command=self.calculate_cost)
+        self.calculate_button.pack()
 
         
         # Cost Information
-        cost_label = ttk.Label(self.cost_info_frame, text="Cost Information")
-        cost_label.pack()
+        self.cost_label = ttk.Label(self.cost_info_frame, text="Total Row Cost")
+        self.cost_label.pack()
+
+        self.row_cost_entry_var=tk.StringVar()
+        self.row_cost_entry=ttk.Entry(self.cost_info_frame, textvariable=self.row_cost_entry_var, state="readonly")
+        self.row_cost_entry.pack()
 
     def remove_row(self):
         # Get the parent container (the notebook tab)
@@ -418,12 +422,15 @@ class DynamicRow(ttk.Frame):
     def calculate_cost(self):
         # Replace with your actual calculation logic
         try:
-            quantity = int(self.quantity_var.get())
-            unit_price = float(self.unit_price_var.get())
-            cost = quantity * unit_price
-            print("Total Cost:", cost)  # You can display the result in a label or any other way you prefer
+            q1 = float(self.cs1_sub_total_entry.get().split(" ")[1])
+            q2 = float(self.cs2_sub_total_entry.get().split(" ")[1])
+            q3 = float(self.cs3_sub_total_entry.get().split(" ")[1])
+            q4 = float(self.cs4_sub_total_entry.get().split(" ")[1])
+            row_total=q1+q2+q3+q4
+            self.row_cost_entry_var.set("$ "+str(row_total))
         except ValueError:
             print("Invalid quantity or unit price")
+
 
 
     # def on_bid_item_selected(self, event):
@@ -646,9 +653,9 @@ class DynamicRow(ttk.Frame):
 
         self.cs1_quantity_entry['state'] = 'normal'
 
-    def calculate_cost(self):
-        # Replace with your actual calculation logic
-        quantity = int(self.quantity_var.get())
-        unit_price = float(self.unit_price_var.get())
-        cost = quantity * unit_price
-        return cost
+    # def calculate_cost(self):
+    #     # Replace with your actual calculation logic
+    #     quantity = int(self.quantity_var.get())
+    #     unit_price = float(self.unit_price_var.get())
+    #     cost = quantity * unit_price
+    #     return cost
