@@ -427,7 +427,7 @@ class DynamicRow(ttk.Frame):
             q3 = float(self.cs3_sub_total_entry.get().split(" ")[1])
             q4 = float(self.cs4_sub_total_entry.get().split(" ")[1])
             row_total=q1+q2+q3+q4
-            self.row_cost_entry_var.set("$ "+str(row_total))
+            self.row_cost_entry_var.set(f"$ {row_total:.2f}")
         except ValueError:
             print("Invalid quantity or unit price")
 

@@ -95,10 +95,10 @@ class DeckTab(ttk.Frame):
             if(item.row_cost_entry.get()==""):
                 cost=0
             else:
-                cost=float(item.row_cost_entry.get())
+                cost=float(item.row_cost_entry.get().split(" ")[1])
             final_cost=final_cost+cost
 
-        self.final_cost_label_var.set(f"Final Cost: {final_cost}")
+        self.final_cost_label_var.set(f"Final Cost: $ {final_cost:.2f}")
 
 
     def on_canvas_configure(self, event):
