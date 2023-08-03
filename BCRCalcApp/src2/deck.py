@@ -89,7 +89,15 @@ class DeckTab(ttk.Frame):
 
 
     def calculate_final_cost(self):
-        final_cost = sum(row.calculate_cost() for row in self.dynamic_rows)
+        final_cost=0
+        for item in self.dynamic_rows:
+            cost=0
+            if(item.row_cost_entry.get()==""):
+                cost=0
+            else:
+                cost=float(item.row_cost_entry.get())
+            final_cost=final_cost+cost
+
         self.final_cost_label_var.set(f"Final Cost: {final_cost}")
 
 
