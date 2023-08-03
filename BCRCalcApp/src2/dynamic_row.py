@@ -187,8 +187,20 @@ class DynamicRow(ttk.Frame):
         # e) cs1_Quantity
         self.cs1_quantity_var = tk.StringVar()
         self.cs1_quantity_label = ttk.Label(self.condition_state_1_frame, text="Quantity")
-        self.cs1_quantity_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.quantity_var, state='disabled')
-			 
+        self.cs1_quantity_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.quantity_var, state='readonly')
+        # self.cs1_quantity_entry.bind('<<ComboboxSelected>>', self.on_bid_item_selected)
+
+        # f) cs1_SubCalcBtn
+        self.cs1_sub_calc_btn = ttk.Button(self.condition_state_1_frame, text="Calculate", command=self.cs1_sub_total_calculate)
+        
+        # g) cs1_Sub_Total_Entry
+        self.cs1_sub_total_entry_var = tk.StringVar()
+        # self.cs1_sub_total_entry_var = "$ 0"
+        # self.cs1_quantity_label = ttk.Label(self.condition_state_1_frame, text="Quantity")
+        self.cs1_sub_total_entry = ttk.Entry(self.condition_state_1_frame, textvariable=self.cs1_sub_total_entry_var, state='normal')
+
+
+
         # Grid layout for Condition State 1 frame
         self.cs1_bid_item_label.grid(row=0, column=0)
         self.cs1_bid_item_dropdown.grid(row=0, column=1)
@@ -200,6 +212,8 @@ class DynamicRow(ttk.Frame):
         self.cs1_unit_price_entry.grid(row=3, column=1)
         self.cs1_quantity_label.grid(row=4, column=0)
         self.cs1_quantity_entry.grid(row=4, column=1)
+        self.cs1_sub_calc_btn.grid(row=5, column=0)
+        self.cs1_sub_total_entry.grid(row=5, column=1)
         
         # Condition State 2
         self.condition_state_2_frame = ttk.LabelFrame(self, text="Condition State 2")
@@ -231,6 +245,14 @@ class DynamicRow(ttk.Frame):
         self.quantity_2_label = ttk.Label(self.condition_state_2_frame, text="Quantity")
         self.quantity_2_entry = ttk.Entry(self.condition_state_2_frame, textvariable=self.quantity_2_var, state='disabled')
 
+        # f) cs2_SubCalcBtn
+        self.cs2_sub_calc_btn = ttk.Button(self.condition_state_2_frame, text="Calculate", command=self.cs2_sub_total_calculate)
+        
+        # g) cs2_Sub_Total_Entry
+        self.cs2_sub_total_entry_var = tk.StringVar()
+        self.cs2_sub_total_entry = ttk.Entry(self.condition_state_2_frame, textvariable=self.cs2_sub_total_entry_var, state='readonly')
+
+
         # Grid layout for Condition State 2 frame
         self.bid_item_2_label.grid(row=0, column=0)
         self.bid_item_2_dropdown.grid(row=0, column=1)
@@ -242,6 +264,9 @@ class DynamicRow(ttk.Frame):
         self.unit_price_2_entry.grid(row=3, column=1)
         self.quantity_2_label.grid(row=4, column=0)
         self.quantity_2_entry.grid(row=4, column=1)
+
+        self.cs2_sub_calc_btn.grid(row=5, column=0)
+        self.cs2_sub_total_entry.grid(row=5, column=1)
 
         
         # Condition State 3
@@ -274,6 +299,14 @@ class DynamicRow(ttk.Frame):
         self.quantity_3_label = ttk.Label(self.condition_state_3_frame, text="Quantity")
         self.quantity_3_entry = ttk.Entry(self.condition_state_3_frame, textvariable=self.quantity_3_var, state='disabled')
 
+        # f) cs3_SubCalcBtn
+        self.cs3_sub_calc_btn = ttk.Button(self.condition_state_3_frame, text="Calculate", command=self.cs3_sub_total_calculate)
+        
+        # g) cs3_Sub_Total_Entry
+        self.cs3_sub_total_entry_var = tk.StringVar()
+        self.cs3_sub_total_entry = ttk.Entry(self.condition_state_3_frame, textvariable=self.cs3_sub_total_entry_var, state='readonly')
+
+
         # Grid layout for Condition State 3 frame
         self.bid_item_3_label.grid(row=0, column=0)
         self.bid_item_3_dropdown.grid(row=0, column=1)
@@ -285,6 +318,9 @@ class DynamicRow(ttk.Frame):
         self.unit_price_3_entry.grid(row=3, column=1)
         self.quantity_3_label.grid(row=4, column=0)
         self.quantity_3_entry.grid(row=4, column=1)
+
+        self.cs3_sub_calc_btn.grid(row=5, column=0)
+        self.cs3_sub_total_entry.grid(row=5, column=1)
 
         
         
@@ -318,6 +354,14 @@ class DynamicRow(ttk.Frame):
         self.quantity_4_label = ttk.Label(self.condition_state_4_frame, text="Quantity")
         self.quantity_4_entry = ttk.Entry(self.condition_state_4_frame, textvariable=self.quantity_4_var, state='disabled')
 
+        # f) cs4_SubCalcBtn
+        self.cs4_sub_calc_btn = ttk.Button(self.condition_state_4_frame, text="Calculate", command=self.cs4_sub_total_calculate)
+        
+        # g) cs4_Sub_Total_Entry
+        self.cs4_sub_total_entry_var = tk.StringVar()
+        self.cs4_sub_total_entry = ttk.Entry(self.condition_state_4_frame, textvariable=self.cs4_sub_total_entry_var, state='readonly')
+
+
         # Grid layout for Condition State 4 frame
         self.bid_item_4_label.grid(row=0, column=0)
         self.bid_item_4_dropdown.grid(row=0, column=1)
@@ -329,6 +373,9 @@ class DynamicRow(ttk.Frame):
         self.unit_price_4_entry.grid(row=3, column=1)
         self.quantity_4_label.grid(row=4, column=0)
         self.quantity_4_entry.grid(row=4, column=1)
+
+        self.cs4_sub_calc_btn.grid(row=5, column=0)
+        self.cs4_sub_total_entry.grid(row=5, column=1)
 
         
         # Actions
@@ -392,7 +439,44 @@ class DynamicRow(ttk.Frame):
     #     self.unit_of_measure_var.set(f'Unit for {selected_bid_item}')
     #     self.unit_price_var.set(f'Price for {selected_bid_item}')
 
+    def cs1_sub_total_calculate(self):
+        try:
+            quantity = int(self.cs1_quantity_entry.get())
+            unit_price = float(self.cs1_unit_price_entry.get())
+            cost = quantity * unit_price
+            self.cs1_sub_total_entry_var.set("$ "+str(cost))
+        except ValueError:
+            print("Invalid quantity or unit price")
+
+    def cs2_sub_total_calculate(self):
+        try:
+            quantity = int(self.quantity_2_entry.get())
+            unit_price = float(self.unit_price_2_entry.get())
+            cost = quantity * unit_price
+            self.cs2_sub_total_entry_var.set("$ "+str(cost))
+        except ValueError:
+            print("Invalid quantity or unit price")
+
+    def cs3_sub_total_calculate(self):
+        try:
+            quantity = int(self.quantity_3_entry.get())
+            unit_price = float(self.unit_price_3_entry.get())
+            cost = quantity * unit_price
+            self.cs3_sub_total_entry_var.set("$ "+str(cost))
+        except ValueError:
+            print("Invalid quantity or unit price")
+
+    def cs4_sub_total_calculate(self):
+        try:
+            quantity = int(self.quantity_4_entry.get())
+            unit_price = float(self.unit_price_4_entry.get())
+            cost = quantity * unit_price
+            self.cs4_sub_total_entry_var.set("$ "+str(cost))
+        except ValueError:
+            print("Invalid quantity or unit price")
         
+        
+
 
     def on_bid_item_2_selected(self, event):
         selected_bid_item = self.bid_item_2_var.get()
