@@ -4,47 +4,8 @@ from ElementNumberNameMData import DeckElementsMData
 from DeckDefectsMData import DefectDatabase
 from DeckUnitsMData import DeckUnitsDB
 from ConditionStateData import ConditionStateData
+from ConditionStateData import retrieve_data_by_bid_item_num
 import sqlite3
-
-
-
-def retrieve_data_by_bid_item_num(bid_item_num):
-    # Connect to the SQLite database
-    db_file = './BenefitCostRatioApp.db'
-    conn = sqlite3.connect(db_file)
-    cursor = conn.cursor()
-
-
-    try:
-       
-        table_name = 'BidItemPriceTxDot'
-        
-        # Execute the query with the provided bid_item_num
-        query = "SELECT BidItemDesc, UnitOfMeas, AvgUnitPrice " \
-            "FROM BidItemPriceTxDot " \
-            "WHERE BidItemNum = ?;"
-        
-        # Execute the query
-        cursor.execute(query, (bid_item_num,))
-        
-        # Fetch the data
-        data = cursor.fetchone()
-        # print(data)
-        cs="None"
-        if data:
-            # Create and return a ConditionStateData object with the retrieved data
-            bid_item_description, unit_of_measure, avg_unit_price = data
-            cs=ConditionStateData(bid_item_num, bid_item_description, unit_of_measure, avg_unit_price)
-        return cs
-            
-    except sqlite3.Error as e:
-        print("Error reading data from the database:", e)
-
-    finally:
-        # Close the database connection
-        conn.close()
-
-
 
 class DynamicRow(ttk.Frame):
     def __init__(self, master, container, controller,bridgeId,uuid, *args, **kwargs):
@@ -53,7 +14,6 @@ class DynamicRow(ttk.Frame):
         self.master=master
         self.bridgeId=bridgeId
         self.uuid=uuid
-
         self.allDeckElemsData=DeckElementsMData()
         self.elemNumDrpDnValues=self.allDeckElemsData.get_elementsNumList()
         self.allDeckUnitsDict=DeckUnitsDB().getDeckUnitsList()
@@ -432,19 +392,6 @@ class DynamicRow(ttk.Frame):
             print("Invalid quantity or unit price")
 
 
-
-    # def on_bid_item_selected(self, event):
-    #     selected_bid_item = self.bid_item_var.get()
-
-    #     # You should replace the following lines with actual calls to your data source
-    #     # to fetch the corresponding data
-
-    #     cs=retrieve_data_by_bid_item_num(selected_bid_item)
-    #     self.cs1_quantity_entry['state'] = 'normal'  # enable Quantity entry
-
-    #     self.intervention_description_var.set(f'Description for {selected_bid_item}')
-    #     self.unit_of_measure_var.set(f'Unit for {selected_bid_item}')
-    #     self.unit_price_var.set(f'Price for {selected_bid_item}')
 
     def cs1_sub_total_calculate(self):
         try:
