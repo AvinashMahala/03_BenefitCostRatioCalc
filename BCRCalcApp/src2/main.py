@@ -39,6 +39,8 @@ class Application(tk.Tk):
     def activate_tabs(self, bridge_id, uuid):
         self.deck_tab = DeckTab(self.notebook, self,bridge_id,uuid)
         self.notebook.add(self.deck_tab, text="Deck")
+        # Set the currently displayed tab to the newly added tab
+        self.notebook.select(self.deck_tab)
         
 
         # Repeat the above steps for the other tabs
