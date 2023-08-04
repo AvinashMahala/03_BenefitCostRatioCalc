@@ -1,7 +1,9 @@
+import re
 import tkinter as tk
 from tkinter import ttk
 from dynamic_row import DynamicRow
 from database import Database
+from tkinter import messagebox
 
 class DeckTab(ttk.Frame):
     def __init__(self, container, controller, bridgeId, uuid, *args, **kwargs):
@@ -121,9 +123,34 @@ class DeckTab(ttk.Frame):
 
         self.final_cost_label_var.set(f"Final Cost: $ {final_cost:.2f}")
 
+    def is_valid_float(self,value):
+    # Check if the value is a valid float in the format 'x.xx' or 'xx.xx'
+        return bool(re.match(r'^\d+\.\d{2}$', value))
+
     def store_to_db(self):
-        self.database.insert_bridge_deck_calc_hist(self.bridgeId,self.uuid, self.final_cost_label_var.get().split(" ")[3])
-        tk.messagebox.showinfo("Success", "Deck Final Cost stored to DB!")
+        try:
+            final_cost = self.final_cost_label_var.get().split(" ")[-1].strip()  # Use the last element after splitting
+
+            # Check if final_cost is empty or invalid
+            if not final_cost or not self.is_valid_float(final_cost):
+                messagebox.showerror("Error", "Final cost is empty or not a valid float (e.g., 'x.xx' or 'xx.xx').")
+                return
+
+            final_cost = float(final_cost)  # Convert the final_cost to a float value
+
+            # Check if the final_cost is 0
+            if final_cost == 0:
+                messagebox.showerror("Error", "Final cost cannot be $ 0.")
+                return
+
+            # Now you can store the final_cost to the database
+            self.database.insert_bridge_deck_calc_hist(self.bridgeId, self.uuid, final_cost)
+            messagebox.showinfo("Success", "Deck Final Cost stored to DB!")
+
+        except ValueError:
+            messagebox.showerror("Error", "Error processing the final cost. Please enter a valid float (e.g., 'x.xx' or 'xx.xx').")
+        except IndexError:
+            messagebox.showerror("Error", "Error processing the final cost. Please ensure it is in the correct format.")
 
 
     def on_canvas_configure(self, event):
