@@ -7,6 +7,7 @@ from ConditionStateData import ConditionStateData
 from ConditionStateData import retrieve_data_by_bid_item_num
 import sqlite3
 from tkinter import messagebox
+from validations import validate_total_quantity
 
 class DynamicRow(ttk.Frame):
     def __init__(self, master, container, controller, bridgeId, uuid, *args, **kwargs):
@@ -76,6 +77,7 @@ class DynamicRow(ttk.Frame):
         self.defect_name_dropdown.bind('<<ComboboxSelected>>', self.on_defect_name_selected)
 
         self.total_quantity_var = tk.StringVar()
+        self.total_quantity_var.trace_add('write', self.on_total_quantity_change)
         self.total_quantity_label = ttk.Label(self.bridge_info_frame, text="Total Quantity")
         self.total_quantity_entry = ttk.Entry(self.bridge_info_frame, textvariable=self.total_quantity_var, state='readonly')
 
@@ -113,6 +115,8 @@ class DynamicRow(ttk.Frame):
             self.condition_state_frames[i].unit_of_measure_var = tk.StringVar()
             self.condition_state_frames[i].unit_price_var = tk.StringVar()
             self.condition_state_frames[i].quantity_var = tk.StringVar()
+            # Set up trace for quantity_var with index i
+            self.condition_state_frames[i].quantity_var.trace_add('write', lambda *args, i=i: self.on_cs_quantity_change(i))
 
             self.condition_state_frames[i].bid_item_label = ttk.Label(frame, text="BidItem")
             self.condition_state_frames[i].bid_item_dropdown = ttk.Combobox(frame, textvariable=self.condition_state_frames[i].bid_item_var, state='readonly')
@@ -128,6 +132,7 @@ class DynamicRow(ttk.Frame):
 
             self.condition_state_frames[i].quantity_label = ttk.Label(frame, text="Quantity")
             self.condition_state_frames[i].quantity_entry = ttk.Entry(frame, textvariable=self.condition_state_frames[i].quantity_var, state='readonly')
+            
 
             self.condition_state_frames[i].sub_calc_btn = ttk.Button(frame, text="Calculate", command=lambda i=i: self.sub_total_calculate(i))
 
@@ -205,6 +210,17 @@ class DynamicRow(ttk.Frame):
                 messagebox.showerror("Error", "No condition state frames found.")
         except (ValueError, IndexError):
             messagebox.showerror("Error", "Calculate Condition Frames Sub Total Cost First!")
+    ##################################################################
+
+    def on_total_quantity_change(self, *args):
+        value = self.total_quantity_var.get()
+        if not validate_total_quantity(value):
+            self.total_quantity_var.set("")  # Clear the invalid entry
+    
+    def on_cs_quantity_change(self, index):
+        value = self.condition_state_frames[index].quantity_var.get()
+        if not validate_total_quantity(value):
+            self.condition_state_frames[index].quantity_var.set("")  # Clear the invalid entry
     ##################################################################
     def on_element_num_selected(self, event):
         selected_option = self.element_num_var.get()
