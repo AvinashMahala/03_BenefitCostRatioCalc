@@ -156,14 +156,14 @@ class DynamicRow(ttk.Frame):
 
 
     #------------Methods---------------
-    ##################################################################
+    #########################################################################
     def create_actions_widgets(self):
         remove_row_button = ttk.Button(self.actions_frame, text="REMOVE ROW", command=self.remove_row)
         remove_row_button.pack()
 
         self.calculate_button = ttk.Button(self.actions_frame, text="Calculate", command=self.calculate_cost)
         self.calculate_button.pack()
-    ##################################################################
+    #########################################################################
     def create_cost_information_widgets(self):
         self.cost_label = ttk.Label(self.cost_info_frame, text="Total Row Cost")
         self.cost_label.pack()
@@ -171,11 +171,7 @@ class DynamicRow(ttk.Frame):
         self.row_cost_entry_var = tk.StringVar()
         self.row_cost_entry = ttk.Entry(self.cost_info_frame, textvariable=self.row_cost_entry_var, state="readonly")
         self.row_cost_entry.pack()
-    ##################################################################
-    #------------Methods---------------
-
-    #--------CallBacks----------------
-    ##################################################################
+    #########################################################################
     def remove_row(self):
         # Get the parent container (the notebook tab)
         parent_container = self.master.master
@@ -230,170 +226,48 @@ class DynamicRow(ttk.Frame):
             self.total_quantity_entry['state']='readonly'
             self.units_dropdown['state']='disabled'
         
-        self.set_cs_one_fields(selected_defect_name)
-        self.set_cs_two_fields(selected_defect_name)
-        self.set_cs_three_fields(selected_defect_name)
-        self.set_cs_four_Fields(selected_defect_name)
+        self.set_cs_fields(1,selected_defect_name)
+        self.set_cs_fields(2,selected_defect_name)
+        self.set_cs_fields(3,selected_defect_name)
+        self.set_cs_fields(4,selected_defect_name)
     ##################################################################
     def on_element_type_selected(self, event):
         selected_option = self.element_type_var.get()
         defect_options = ['Defect1', 'Defect2', 'Defect3']  # Replace this with a function call to fetch options from the database
         self.defect_dropdown['values'] = defect_options
         self.defect_dropdown['state'] = 'readonly'
+    #########################################################################
     def on_defect_selected(self, event):
         bid_item_options = ['Bid1', 'Bid2', 'Bid3']  # Replace this with a function call to fetch options from the database
         self.bid_item_dropdown['values'] = bid_item_options
         self.bid_item_dropdown['state'] = 'readonly'
+    #########################################################################
     def on_units_dropdown_selected(self, event):
         pass
-    ##################################################################
-    #--------CallBacks----------------
-
-    #-----------CS1 Callbacks-----------------------
-    ##################################################################
-    def set_cs_one_fields(self,selected_defect_name):
-        defect_bid_items_str=self.DeckDefectsState1[selected_defect_name]
-        # self.cs1_bid_item_var=""
-        if(defect_bid_items_str=="None"):
-            self.condition_state_frames[0].bid_item_dropdown['values']=["None"]
-            # self.cs1_bid_item_var="None"
-            self.condition_state_frames[0].bid_item_dropdown['state']='readonly'
+    #########################################################################
+    def get_defect_bid_items_str(self, cs_index, selected_defect_name):
+        if cs_index == 1:
+            return self.DeckDefectsState1[selected_defect_name]
+        elif cs_index == 2:
+            return self.DeckDefectsState2[selected_defect_name]
+        elif cs_index == 3:
+            return self.DeckDefectsState3[selected_defect_name]
+        elif cs_index == 4:
+            return self.DeckDefectsState4[selected_defect_name]
         else:
-            valuesList=defect_bid_items_str.split(",")
-            self.condition_state_frames[0].bid_item_dropdown['state']='readonly'
-            self.condition_state_frames[0].bid_item_dropdown['values']=valuesList
-    ##################################################################
-    def on_bid_item_one_selected(self, event):
-        selected_bid_item = self.cs1_bid_item_var.get()
-        print(selected_bid_item)
-        cs=retrieve_data_by_bid_item_num(selected_bid_item)
-        print(cs)
-        description = cs.bid_item_description  # Replace this with a function call to fetch description from the database
-        self.cs1_intervention_description_entry.insert(tk.END, description)
-        self.cs1_intervention_description_var.set(description)
-        unit_of_measure = cs.unit_of_measure  # Replace this with a function call to fetch unit of measure from the database
-        self.unit_of_measure_var.set(unit_of_measure)
-        unit_price = cs.avg_unit_price  # Replace this with a function call to fetch unit price from the database
-        self.unit_price_var.set(unit_price)
-        self.cs1_quantity_entry['state'] = 'normal'
-    ##################################################################
-    def cs_one_sub_total_calculate(self):
-        try:
-            quantity = int(self.cs1_quantity_entry.get())
-            unit_price = float(self.cs1_unit_price_entry.get())
-            cost = quantity * unit_price
-            self.cs1_sub_total_entry_var.set("$ "+str(cost))
-        except ValueError:
-            print("Invalid quantity or unit price")
-    ##################################################################
-    #-----------CS1 Callbacks-----------------------
-    ##################################################################
-    #-----------CS2 Callbacks-----------------------    
-    def set_cs_two_fields(self,selected_defect_name):
-        defect_bid_items_str=self.DeckDefectsState2[selected_defect_name]
-        if(defect_bid_items_str=="None"):
-            self.condition_state_frames[1].bid_item_dropdown['values']=["None"]
-            self.condition_state_frames[1].bid_item_dropdown['state']='readonly'
-        else:
-            valuesList=defect_bid_items_str.split(",")
-            self.condition_state_frames[1].bid_item_dropdown['state']='readonly'
-            self.condition_state_frames[1].bid_item_dropdown['values']=valuesList
-    ##################################################################
-    def on_bid_item_two_selected(self, event):
-        selected_bid_item = self.bid_item_2_var.get()
-        # print(selected_bid_item)
-        cs=retrieve_data_by_bid_item_num(selected_bid_item)
-        # print(cs)
-        description = cs.bid_item_description  # Replace this with a function call to fetch description from the database
-        self.intervention_description_2_var.set(description)
-        unit_of_measure = cs.unit_of_measure  # Replace this with a function call to fetch unit of measure from the database
-        self.unit_of_measure_2_var.set(unit_of_measure)
-        unit_price = cs.avg_unit_price  # Replace this with a function call to fetch unit price from the database
-        self.unit_price_2_var.set(unit_price)
-        self.quantity_2_entry['state'] = 'normal'
-    ##################################################################  
-    def cs_two_sub_total_calculate(self):
-        try:
-            quantity = int(self.quantity_2_entry.get())
-            unit_price = float(self.unit_price_2_entry.get())
-            cost = quantity * unit_price
-            self.cs2_sub_total_entry_var.set("$ "+str(cost))
-        except ValueError:
-            print("Invalid quantity or unit price")
-    ##################################################################
-    #-----------CS2 Callbacks-----------------------
+            return "None"
+    #########################################################################        
+    def set_cs_fields(self, cs_index, selected_defect_name):
+        defect_bid_items_str = self.get_defect_bid_items_str(cs_index, selected_defect_name)
 
-    #-----------CS3 Callbacks-----------------------
-    def set_cs_three_fields(self,selected_defect_name):
-        defect_bid_items_str=self.DeckDefectsState3[selected_defect_name]
-        if(defect_bid_items_str=="None"):
-            self.condition_state_frames[2].bid_item_dropdown['values']=["None"]
-            self.condition_state_frames[2].bid_item_dropdown['state']='readonly'
+        if defect_bid_items_str == "None":
+            self.condition_state_frames[cs_index - 1].bid_item_dropdown['values'] = ["None"]
+            self.condition_state_frames[cs_index - 1].bid_item_dropdown['state'] = 'readonly'
         else:
-            valuesList=defect_bid_items_str.split(",")
-            self.condition_state_frames[2].bid_item_dropdown['state']='readonly'
-            self.condition_state_frames[2].bid_item_dropdown['values']=valuesList
-    ##################################################################
-    def on_bid_item_three_selected(self, event):
-        selected_bid_item = self.bid_item_3_var.get()
-        # print(selected_bid_item)
-        cs=retrieve_data_by_bid_item_num(selected_bid_item)
-        # print(cs)
-        description = cs.bid_item_description  # Replace this with a function call to fetch description from the database
-        self.intervention_description_3_var.set(description)
-        unit_of_measure = cs.unit_of_measure  # Replace this with a function call to fetch unit of measure from the database
-        self.unit_of_measure_3_var.set(unit_of_measure)
-        unit_price = cs.avg_unit_price  # Replace this with a function call to fetch unit price from the database
-        self.unit_price_3_var.set(unit_price)
-        self.quantity_3_entry['state'] = 'normal'
-    ##################################################################
-    def cs_three_sub_total_calculate(self):
-        try:
-            quantity = int(self.quantity_3_entry.get())
-            unit_price = float(self.unit_price_3_entry.get())
-            cost = quantity * unit_price
-            self.cs3_sub_total_entry_var.set("$ "+str(cost))
-        except ValueError:
-            print("Invalid quantity or unit price")
-    ##################################################################
-    #-----------CS3 Callbacks-----------------------
-
-    #-----------CS4 Callbacks-----------------------
-    def set_cs_four_Fields(self,selected_defect_name):
-        defect_bid_items_str=self.DeckDefectsState4[selected_defect_name]
-        if(defect_bid_items_str=="None"):
-            self.condition_state_frames[3].bid_item_dropdown['values']=["None"]
-            self.condition_state_frames[3].bid_item_dropdown['state']='readonly'
-        else:
-            valuesList=defect_bid_items_str.split(",")
-            self.condition_state_frames[3].bid_item_dropdown['state']='readonly'
-            self.condition_state_frames[3].bid_item_dropdown['values']=valuesList
-    ##################################################################
-    def on_bid_item_four_selected(self, event):
-        selected_bid_item = self.bid_item_4_var.get()
-        # print(selected_bid_item)
-        cs=retrieve_data_by_bid_item_num(selected_bid_item)
-        # print(cs)
-        description = cs.bid_item_description  # Replace this with a function call to fetch description from the database
-        self.intervention_description_4_var.set(description)
-        unit_of_measure = cs.unit_of_measure  # Replace this with a function call to fetch unit of measure from the database
-        self.unit_of_measure_4_var.set(unit_of_measure)
-        unit_price = cs.avg_unit_price  # Replace this with a function call to fetch unit price from the database
-        self.unit_price_4_var.set(unit_price)
-        self.quantity_4_entry['state'] = 'normal'
-    ##################################################################
-    def cs_four_sub_total_calculate(self):
-        try:
-            quantity = int(self.quantity_4_entry.get())
-            unit_price = float(self.unit_price_4_entry.get())
-            cost = quantity * unit_price
-            self.cs4_sub_total_entry_var.set("$ "+str(cost))
-        except ValueError:
-            print("Invalid quantity or unit price")
-    ##################################################################
-    #-----------CS4 Callbacks-----------------------
-        
-
+            valuesList = defect_bid_items_str.split(",")
+            self.condition_state_frames[cs_index - 1].bid_item_dropdown['state'] = 'readonly'
+            self.condition_state_frames[cs_index - 1].bid_item_dropdown['values'] = valuesList
+    #########################################################################
     def on_bid_item_selected(self, event, index):
         selected_bid_item_var = self.condition_state_frames[index].bid_item_var
         selected_bid_item = selected_bid_item_var.get()
@@ -401,7 +275,7 @@ class DynamicRow(ttk.Frame):
         description = cs.bid_item_description
         unit_of_measure = cs.unit_of_measure
         unit_price = cs.avg_unit_price
-
+        
         intervention_description_var = self.condition_state_frames[index].intervention_description_var
         unit_of_measure_var = self.condition_state_frames[index].unit_of_measure_var
         unit_price_var = self.condition_state_frames[index].unit_price_var
@@ -412,22 +286,15 @@ class DynamicRow(ttk.Frame):
         unit_of_measure_var.set(unit_of_measure)
         unit_price_var.set(unit_price)
         quantity_entry['state'] = 'normal'
-
+    #########################################################################
     def sub_total_calculate(self, index):
         try:
             quantity_entry = self.condition_state_frames[index].quantity_entry
             unit_price_entry = self.condition_state_frames[index].unit_price_entry
             sub_total_var = self.condition_state_frames[index].sub_total_entry_var
-
             quantity = int(quantity_entry.get())
             unit_price = float(unit_price_entry.get())
             cost = quantity * unit_price
-
             sub_total_var.set("$ {:.2f}".format(cost))
         except ValueError:
             print("Invalid quantity or unit price")
-
-
-    
-    
-
