@@ -1,15 +1,15 @@
 import tkinter as tk
 from tkinter import ttk
-from ElementNumberNameMData import DeckElementsMData
-from DeckDefectsMData import DefectDatabase
-from DeckUnitsMData import DeckUnitsDB
-from ConditionStateData import ConditionStateData
-from ConditionStateData import retrieve_data_by_bid_item_num
+from .deck_data_elem_num_nm import DeckElementsMData
+from .deck_data_defects import DeckDefectsData
+from .deck_data_units import DeckUnitsDB
+from .deck_data_cs import DeckConditionStateData
+from .deck_data_cs import retrieve_data_by_bid_item_num
 import sqlite3
 from tkinter import messagebox
-from validations import validate_total_quantity
+from .deck_validations import validate_total_quantity
 
-class DynamicRow(ttk.Frame):
+class DeckDynamicRow(ttk.Frame):
     def __init__(self, master, container, controller, bridgeId, uuid, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
         self.controller = controller
@@ -20,7 +20,7 @@ class DynamicRow(ttk.Frame):
         self.allDeckElemsData = DeckElementsMData()
         self.elemNumDrpDnValues = self.allDeckElemsData.get_elementsNumList()
         self.allDeckUnitsDict = DeckUnitsDB().getDeckUnitsList()
-        self.allDeckDefectsData = DefectDatabase()
+        self.allDeckDefectsData = DeckDefectsData()
         self.defectsList = self.allDeckDefectsData.getOnlyDefectsList()
 
         self.DeckDefectsState1=self.allDeckDefectsData.getDefectListForState(1)

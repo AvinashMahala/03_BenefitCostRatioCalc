@@ -1,11 +1,14 @@
 #This file will contain the Application class, which is responsible for managing the overall application.
+# import sys
+# sys.path.append('D:\\GRA\\Repos\\BenefitCostRatioCalc\\bcrcalcapp\\src2')
+
 
 import tkinter as tk
 from tkinter import ttk
 from database import Database
 from tkinter import messagebox
 from homepage import Homepage
-from deck import DeckTab
+from deckModule.deck_tab import DeckTab
 from steel import Steel
 from superstructure import Superstructure
 from substructure import Substructure

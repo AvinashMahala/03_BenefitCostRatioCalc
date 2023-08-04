@@ -1,8 +1,8 @@
 import re
 import tkinter as tk
 from tkinter import ttk
-from dynamic_row import DynamicRow
-from database import Database
+from .deck_dynamic_row import DeckDynamicRow
+# from database import Database
 from tkinter import messagebox
 
 class DeckTab(ttk.Frame):
@@ -13,7 +13,7 @@ class DeckTab(ttk.Frame):
         self.uuid=uuid
         self.dynamic_rows = []
         self.calculation_form_area_canvas=None
-        self.database = Database()
+        self.database = self.controller.database
 
         self.create_top_actions_area(0, 0, 1, 0.2)
         self.create_scrollable_canvas(0, 0.2, 0.98, 0.6)
@@ -107,7 +107,7 @@ class DeckTab(ttk.Frame):
             tk.messagebox.showerror("Error", "Cannot add more than 10 rows.")
             return
 
-        row = DynamicRow(self ,self.calculation_form_area, self.controller,self.bridgeId,self.uuid,)
+        row = DeckDynamicRow(self ,self.calculation_form_area, self.controller,self.bridgeId,self.uuid,)
         row.pack()
         self.dynamic_rows.append(row)
         self.on_canvas_configure(None)

@@ -1,4 +1,4 @@
-class DefectDatabase:
+class DeckDefectsData:
     def __init__(self):
         self.defectsList=[
             "Delamination / Spall / Patched Area (1080)",
