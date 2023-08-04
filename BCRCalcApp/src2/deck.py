@@ -23,29 +23,34 @@ class DeckTab(ttk.Frame):
 
 
     def create_top_actions_area(self, param_relx=0, param_rely=0, param_relwidth=1, param_relheight=0.2):
-        self.actions_area = ttk.LabelFrame(self, text="Actions Area", padding=10)
-        self.actions_area.grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
+        # bridge_info_area Area (Left Frame)
+        self.bridge_info_area = ttk.LabelFrame(self, text="Bridge Info Area", padding=10)
+        self.bridge_info_area.grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
 
         label_caption_font = ("Arial", 16, "bold")
         label_value_font = ("Arial", 14, "normal")
-        button_caption_font = ("Arial", 14, "bold")
 
-        self.uuid_label_caption = ttk.Label(self.actions_area, text="UUID", font=label_caption_font)
-        self.uuid_label_caption.grid(row=0, column=0, padx=1, pady=1, sticky="w")
+        self.uuid_label_caption = ttk.Label(self.bridge_info_area, text="UUID", font=label_caption_font)
+        self.uuid_label_caption.grid(row=0, column=0, padx=5, pady=5, sticky="w")
 
         self.uuid_label_var = tk.StringVar(value=self.uuid)  # replace Placeholder with actual UUID
-        self.uuid_label = ttk.Label(self.actions_area, textvariable=self.uuid_label_var, font=label_value_font)
-        self.uuid_label.grid(row=0, column=1, padx=1, pady=1, sticky="w")
+        self.uuid_label = ttk.Label(self.bridge_info_area, textvariable=self.uuid_label_var, font=label_value_font)
+        self.uuid_label.grid(row=0, column=1, padx=5, pady=5, sticky="w")
 
-        self.bridgeId_label_caption = ttk.Label(self.actions_area, text="BridgeID", font=label_caption_font)
-        self.bridgeId_label_caption.grid(row=1, column=0, padx=1, pady=1, sticky="w")
+        self.bridgeId_label_caption = ttk.Label(self.bridge_info_area, text="BridgeID", font=label_caption_font)
+        self.bridgeId_label_caption.grid(row=1, column=0, padx=5, pady=5, sticky="w")
 
         self.bridgeId_label_var = tk.StringVar(value=self.bridgeId)  # replace Placeholder with actual bridgeId
-        self.bridgeId_label = ttk.Label(self.actions_area, textvariable=self.bridgeId_label_var, font=label_value_font)
-        self.bridgeId_label.grid(row=1, column=1, padx=1, pady=1, sticky="w")
+        self.bridgeId_label = ttk.Label(self.bridge_info_area, textvariable=self.bridgeId_label_var, font=label_value_font)
+        self.bridgeId_label.grid(row=1, column=1, padx=5, pady=5, sticky="w")
 
-        self.add_row_button = ttk.Button(self.actions_area, text="Add Row", command=self.add_row)
-        self.add_row_button.grid(row=2, column=0, columnspan=2, padx=1, pady=1, sticky="ew")
+        # Actions Area Frame for the "Add Row" button
+        actions_area_frame = ttk.LabelFrame(self, text="Actions Area", padding=10)
+        actions_area_frame.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
+
+        self.add_row_button = ttk.Button(actions_area_frame, text="Add Row", command=self.add_row)
+        self.add_row_button.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
+
 
 
 
