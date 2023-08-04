@@ -1,13 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
-from .deck_data_elem_num_nm import DeckElementsMData
-from .deck_data_defects import DeckDefectsData
-from .deck_data_units import DeckUnitsDB
-from .deck_data_cs import DeckConditionStateData
-from .deck_data_cs import retrieve_data_by_bid_item_num
+from deck_data_elem_num_nm import DeckElementsMData
+from deck_data_defects import DeckDefectsData
+from deck_data_units import DeckUnitsDB
+from deck_data_cs import DeckConditionStateData
+from deck_data_cs import retrieve_data_by_bid_item_num
 import sqlite3
 from tkinter import messagebox
-from .deck_validations import validate_total_quantity
+from deck_validations import validate_total_quantity
 
 class DeckDynamicRow(ttk.Frame):
     def __init__(self, master, container, controller, bridgeId, uuid, *args, **kwargs):

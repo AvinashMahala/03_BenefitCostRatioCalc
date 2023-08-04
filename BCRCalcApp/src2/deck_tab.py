@@ -1,7 +1,7 @@
 import re
 import tkinter as tk
 from tkinter import ttk
-from .deck_dynamic_row import DeckDynamicRow
+from deck_dynamic_row import DeckDynamicRow
 # from database import Database
 from tkinter import messagebox
 
