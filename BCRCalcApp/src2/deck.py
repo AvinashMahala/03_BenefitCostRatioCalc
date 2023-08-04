@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from dynamic_row import DynamicRow
-
+from database import Database
 
 class DeckTab(ttk.Frame):
     def __init__(self, container, controller, bridgeId, uuid, *args, **kwargs):
@@ -11,6 +11,7 @@ class DeckTab(ttk.Frame):
         self.uuid=uuid
         self.dynamic_rows = []
         self.calculation_form_area_canvas=None
+        self.database = Database()
 
         self.create_top_actions_area(0, 0, 1, 0.2)
         self.create_scrollable_canvas(0, 0.2, 0.98, 0.6)
@@ -67,15 +68,26 @@ class DeckTab(ttk.Frame):
 
 
     def create_bottom_total_cost_area(self,param_relx=0, param_rely=0.9, param_relwidth=1, param_relheight=0.1):
+        # Final Cost Area with grid layout
         self.final_cost_area = ttk.LabelFrame(self, text="Final Cost Area")
         self.final_cost_area.place(relx=param_relx, rely=param_rely, relwidth=param_relwidth, relheight=param_relheight)
 
+        # Calculate Final Cost button
         self.calculate_final_cost_button = ttk.Button(self.final_cost_area, text="Calculate Final", command=self.calculate_final_cost)
-        self.calculate_final_cost_button.pack()
+        self.calculate_final_cost_button.grid(row=0, column=0)
 
+        # Final Cost Label
         self.final_cost_label_var = tk.StringVar()
         self.final_cost_label = ttk.Label(self.final_cost_area, textvariable=self.final_cost_label_var)
-        self.final_cost_label.pack()
+        self.final_cost_label.grid(row=0, column=1)
+
+        # Store To DB button
+        self.calculate_store_to_db_btn = ttk.Button(self.final_cost_area, text="Store To DB", command=self.store_to_db)
+        self.calculate_store_to_db_btn.grid(row=0, column=2)
+
+        # Reset button
+        self.reset_button = ttk.Button(self.final_cost_area, text="Reset", command=self.reset_deck_tab)
+        self.reset_button.grid(row=1, column=0, columnspan=3)
 
     def add_row(self):
         if len(self.dynamic_rows) >= 10:
@@ -87,6 +99,15 @@ class DeckTab(ttk.Frame):
         self.dynamic_rows.append(row)
         self.on_canvas_configure(None)
 
+    def reset_dynamic_rows(self):
+        # Destroy all the dynamic rows and clear the list
+        for row in self.dynamic_rows:
+            row.destroy()
+        self.dynamic_rows = []
+
+    def reset_deck_tab(self):
+        self.reset_dynamic_rows()
+        self.final_cost_label_var.set("")
 
     def calculate_final_cost(self):
         final_cost=0
@@ -99,6 +120,10 @@ class DeckTab(ttk.Frame):
             final_cost=final_cost+cost
 
         self.final_cost_label_var.set(f"Final Cost: $ {final_cost:.2f}")
+
+    def store_to_db(self):
+        self.database.insert_bridge_deck_calc_hist(self.bridgeId,self.uuid, self.final_cost_label_var.get().split(" ")[3])
+        tk.messagebox.showinfo("Success", "Deck Final Cost stored to DB!")
 
 
     def on_canvas_configure(self, event):

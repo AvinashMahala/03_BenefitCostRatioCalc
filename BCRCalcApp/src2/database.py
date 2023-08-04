@@ -9,9 +9,16 @@ class Database:
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS CalculationMetaData
                             (bridge_id text, uuid text)
                             """)
+        self.cursor.execute("""CREATE TABLE IF NOT EXISTS BridgeDeckCalcHist
+                            (bridge_id text, uuid text, final_cost real)
+                            """)
         self.conn.commit()
 
     def insert_calculation_metadata(self, bridge_id, uuid):
         self.cursor.execute("""INSERT INTO CalculationMetaData VALUES (?, ?)""", (bridge_id, uuid))
+        self.conn.commit()
+
+    def insert_bridge_deck_calc_hist(self, bridge_id, uuid, final_cost):
+        self.cursor.execute("""INSERT INTO BridgeDeckCalcHist VALUES (?, ?, ?)""", (bridge_id, uuid, final_cost))
         self.conn.commit()
 
