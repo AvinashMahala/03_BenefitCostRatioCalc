@@ -19,32 +19,38 @@ class DeckTab(ttk.Frame):
         self.create_scrollable_canvas(0, 0.2, 0.98, 0.6)
         self.create_vertical_scroll(0.98, 0.2, 0.02, 0.6)
         self.create_horizontal_scroll(0,0.8,0.98,0.1)
-        # for _ in range(1):  # replace with the actual number of rows you want
-        #     self.add_row()
-
         self.create_bottom_total_cost_area(0, 0.9, 1, 0.1)
 
 
     def create_top_actions_area(self, param_relx=0, param_rely=0, param_relwidth=1, param_relheight=0.2):
-        self.actions_area = ttk.LabelFrame(self, text="Actions Area")
-        self.actions_area.place(relx=param_relx, rely=param_rely, relwidth=param_relwidth, relheight=param_relheight)
+        self.actions_area = ttk.LabelFrame(self, text="Actions Area", padding=10)
+        self.actions_area.grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
 
-        self.uuid_label_caption = ttk.Label(self.actions_area, text="UUID")
-        self.uuid_label_caption.pack()
+        label_caption_font = ("Arial", 16, "bold")
+        label_value_font = ("Arial", 14, "normal")
+        button_caption_font = ("Arial", 14, "bold")
+
+        self.uuid_label_caption = ttk.Label(self.actions_area, text="UUID", font=label_caption_font)
+        self.uuid_label_caption.grid(row=0, column=0, padx=1, pady=1, sticky="w")
+
         self.uuid_label_var = tk.StringVar(value=self.uuid)  # replace Placeholder with actual UUID
-        self.uuid_label = ttk.Label(self.actions_area, textvariable=self.uuid_label_var)
-        self.uuid_label.pack()
+        self.uuid_label = ttk.Label(self.actions_area, textvariable=self.uuid_label_var, font=label_value_font)
+        self.uuid_label.grid(row=0, column=1, padx=1, pady=1, sticky="w")
 
-        self.bridgeId_label_caption = ttk.Label(self.actions_area, text="BridgeID")
-        self.bridgeId_label_caption.pack()
+        self.bridgeId_label_caption = ttk.Label(self.actions_area, text="BridgeID", font=label_caption_font)
+        self.bridgeId_label_caption.grid(row=1, column=0, padx=1, pady=1, sticky="w")
+
         self.bridgeId_label_var = tk.StringVar(value=self.bridgeId)  # replace Placeholder with actual bridgeId
-        self.bridgeId_label = ttk.Label(self.actions_area, textvariable=self.bridgeId_label_var)
-        self.bridgeId_label.pack()
+        self.bridgeId_label = ttk.Label(self.actions_area, textvariable=self.bridgeId_label_var, font=label_value_font)
+        self.bridgeId_label.grid(row=1, column=1, padx=1, pady=1, sticky="w")
 
         self.add_row_button = ttk.Button(self.actions_area, text="Add Row", command=self.add_row)
-        self.add_row_button.pack()
+        self.add_row_button.grid(row=2, column=0, columnspan=2, padx=1, pady=1, sticky="ew")
 
-    def create_scrollable_canvas(self,param_relx=0, param_rely=0.1, param_relwidth=1, param_relheight=0.7):
+
+
+
+    def create_scrollable_canvas(self,param_relx=0, param_rely=0.3, param_relwidth=1, param_relheight=0.7):
         # Create a Canvas for the Calculation Form Area
         self.calculation_form_area_canvas = tk.Canvas(self, borderwidth=0, background="#ffffff")
         self.calculation_form_area_canvas.place(relx=param_relx, rely=param_rely, relwidth=param_relwidth, relheight=param_relheight)
