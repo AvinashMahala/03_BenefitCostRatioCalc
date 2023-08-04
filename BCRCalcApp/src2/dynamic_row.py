@@ -6,6 +6,7 @@ from DeckUnitsMData import DeckUnitsDB
 from ConditionStateData import ConditionStateData
 from ConditionStateData import retrieve_data_by_bid_item_num
 import sqlite3
+from tkinter import messagebox
 
 class DynamicRow(ttk.Frame):
     def __init__(self, master, container, controller, bridgeId, uuid, *args, **kwargs):
@@ -158,8 +159,8 @@ class DynamicRow(ttk.Frame):
     #------------Methods---------------
     #########################################################################
     def create_actions_widgets(self):
-        remove_row_button = ttk.Button(self.actions_frame, text="REMOVE ROW", command=self.remove_row)
-        remove_row_button.pack()
+        # remove_row_button = ttk.Button(self.actions_frame, text="REMOVE ROW", command=self.remove_row)
+        # remove_row_button.pack()
 
         self.calculate_button = ttk.Button(self.actions_frame, text="Calculate", command=self.calculate_cost)
         self.calculate_button.pack()
@@ -192,16 +193,18 @@ class DynamicRow(ttk.Frame):
             print("Cannot remove the last row.")
     ##################################################################
     def calculate_cost(self):
-        # Replace with your actual calculation logic
         try:
-            q1 = float(self.condition_state_frames[0].sub_total_entry.get().split(" ")[1])
-            q2 = float(self.condition_state_frames[1].sub_total_entry.get().split(" ")[1])
-            q3 = float(self.condition_state_frames[2].sub_total_entry.get().split(" ")[1])
-            q4 = float(self.condition_state_frames[3].sub_total_entry.get().split(" ")[1])
-            row_total=q1+q2+q3+q4
-            self.row_cost_entry_var.set(f"$ {row_total:.2f}")
-        except ValueError:
-            print("Invalid quantity or unit price")
+            if len(self.condition_state_frames) > 0:
+                q1 = float(self.condition_state_frames[0].sub_total_entry.get().split(" ")[1])
+                q2 = float(self.condition_state_frames[1].sub_total_entry.get().split(" ")[1])
+                q3 = float(self.condition_state_frames[2].sub_total_entry.get().split(" ")[1])
+                q4 = float(self.condition_state_frames[3].sub_total_entry.get().split(" ")[1])
+                row_total = q1 + q2 + q3 + q4
+                self.row_cost_entry_var.set(f"$ {row_total:.2f}")
+            else:
+                messagebox.showerror("Error", "No condition state frames found.")
+        except (ValueError, IndexError):
+            messagebox.showerror("Error", "Calculate Condition Frames Sub Total Cost First!")
     ##################################################################
     def on_element_num_selected(self, event):
         selected_option = self.element_num_var.get()
@@ -288,13 +291,16 @@ class DynamicRow(ttk.Frame):
         quantity_entry['state'] = 'normal'
     #########################################################################
     def sub_total_calculate(self, index):
-        try:
-            quantity_entry = self.condition_state_frames[index].quantity_entry
-            unit_price_entry = self.condition_state_frames[index].unit_price_entry
-            sub_total_var = self.condition_state_frames[index].sub_total_entry_var
-            quantity = int(quantity_entry.get())
-            unit_price = float(unit_price_entry.get())
-            cost = quantity * unit_price
-            sub_total_var.set("$ {:.2f}".format(cost))
-        except ValueError:
-            print("Invalid quantity or unit price")
+        if 0 <= index < len(self.condition_state_frames):
+            try:
+                quantity_entry = self.condition_state_frames[index].quantity_entry
+                unit_price_entry = self.condition_state_frames[index].unit_price_entry
+                sub_total_var = self.condition_state_frames[index].sub_total_entry_var
+                quantity = int(quantity_entry.get())
+                unit_price = float(unit_price_entry.get())
+                cost = quantity * unit_price
+                sub_total_var.set("$ {:.2f}".format(cost))
+            except ValueError:
+                messagebox.showerror("Error", "Invalid quantity or unit price")
+        else:
+            print("Invalid index: Index out of range")
