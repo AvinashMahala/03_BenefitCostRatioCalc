@@ -51,6 +51,11 @@ class DeckTab(ttk.Frame):
         self.add_row_button = ttk.Button(actions_area_frame, text="Add Row", command=self.add_row)
         self.add_row_button.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
 
+        # Set the background color to red using the style
+        # style = ttk.Style(self)
+        # style.configure('Background.TFrame', background='#e6e7e8')
+        # self.bridge_info_area.configure(style='Background.TFrame')
+
 
 
 

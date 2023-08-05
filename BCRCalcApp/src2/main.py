@@ -34,6 +34,11 @@ class Application(tk.Tk):
         self.final_result = None
         self.benefit_cost_ratio = None
 
+        # Set the background color to red using the style
+        # style = ttk.Style(self)
+        # style.configure('Background.TFrame', background='#62c6dc')
+        # self.homepage.configure(style='Background.TFrame')
+
     def activate_tabs(self, bridge_id, uuid):
         self.deck_tab = DeckTab(self.notebook, self,bridge_id,uuid)
         self.notebook.add(self.deck_tab, text="Deck")

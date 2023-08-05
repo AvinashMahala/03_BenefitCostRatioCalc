@@ -33,6 +33,11 @@ class Homepage(ttk.Frame):
         # Adjust the height of the button by adding padding to the text
         self.calculation_button.config(padding=(0, 15))
 
+        # Set the background color to red using the style
+        # style = ttk.Style(self)
+        # style.configure('Background.TFrame', background='#e6e7e8')
+        # self.homepage_area.configure(style='Background.TFrame')
+
 
     def generate_calculation(self):
         bridge_id = self.bridge_id_entry.get().strip()
