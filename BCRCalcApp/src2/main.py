@@ -7,10 +7,11 @@ from deck_tab import DeckTab
 from steel_tab import SteelTab
 from sub_tab import SubTab
 from sup_tab import SupTab
+from final_result_tab import FinalResultTab
+
 from steel import Steel
 from superstructure import Superstructure
 from substructure import Substructure
-from final_result import FinalResult
 from benefit_cost_ratio import BenefitCostRatio
 
 class Application(tk.Tk):
@@ -47,11 +48,13 @@ class Application(tk.Tk):
         self.steel_tab = SteelTab(self.notebook, self,bridge_id,uuid)
         self.sub_tab = SubTab(self.notebook, self,bridge_id,uuid)
         self.sup_tab = SupTab(self.notebook, self,bridge_id,uuid)
+        self.final_result_tab = FinalResultTab(self.notebook, self,bridge_id,uuid)
 
         self.notebook.add(self.deck_tab, text="Deck")
         self.notebook.add(self.steel_tab, text="Steel")
         self.notebook.add(self.sub_tab, text="SubStructure")
         self.notebook.add(self.sup_tab, text="SuperStructure")
+        self.notebook.add(self.final_result_tab, text="Final Result")
         # Set the currently displayed tab to the newly added tab
         self.notebook.select(self.deck_tab)
         
