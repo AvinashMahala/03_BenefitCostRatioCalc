@@ -6,6 +6,7 @@ from homepage import Homepage
 from deck_tab import DeckTab
 from steel_tab import SteelTab
 from sub_tab import SubTab
+from sup_tab import SupTab
 from steel import Steel
 from superstructure import Superstructure
 from substructure import Substructure
@@ -45,10 +46,12 @@ class Application(tk.Tk):
         self.deck_tab = DeckTab(self.notebook, self,bridge_id,uuid)
         self.steel_tab = SteelTab(self.notebook, self,bridge_id,uuid)
         self.sub_tab = SubTab(self.notebook, self,bridge_id,uuid)
+        self.sup_tab = SupTab(self.notebook, self,bridge_id,uuid)
 
         self.notebook.add(self.deck_tab, text="Deck")
         self.notebook.add(self.steel_tab, text="Steel")
-        self.notebook.add(self.sub_tab, text="Substructure")
+        self.notebook.add(self.sub_tab, text="SubStructure")
+        self.notebook.add(self.sup_tab, text="SuperStructure")
         # Set the currently displayed tab to the newly added tab
         self.notebook.select(self.deck_tab)
         

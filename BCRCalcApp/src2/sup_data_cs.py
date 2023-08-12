@@ -1,6 +1,6 @@
 import sqlite3
 
-class DeckConditionStateData:
+class SupConditionStateData:
     def __init__(self, bid_item_num, bid_item_description, unit_of_measure, avg_unit_price):
         self.bid_item_num = bid_item_num
         self.bid_item_description = bid_item_description
@@ -26,9 +26,9 @@ def retrieve_data_by_bid_item_num(bid_item_num):
             data = cursor.fetchone()
             
             if data:
-                # Create and return a DeckConditionStateData object with the retrieved data
+                # Create and return a SupConditionStateData object with the retrieved data
                 bid_item_description, unit_of_measure, avg_unit_price = data
-                return DeckConditionStateData(bid_item_num, bid_item_description, unit_of_measure, avg_unit_price)
+                return SupConditionStateData(bid_item_num, bid_item_description, unit_of_measure, avg_unit_price)
             else:
                 return None
             
