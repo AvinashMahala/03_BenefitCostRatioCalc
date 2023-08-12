@@ -14,7 +14,7 @@ class FinalResultTab(ttk.Frame):
 
 
         # Left work area
-        left_frame = tk.Frame(self)
+        left_frame = ttk.LabelFrame(self, text="UUID Area")
         left_frame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
 
         tk.Label(left_frame, text="UUID").pack(pady=10)
@@ -24,7 +24,7 @@ class FinalResultTab(ttk.Frame):
         retrieve_btn.pack(pady=10)
 
         # Right work area (Grid Headers)
-        right_frame = tk.Frame(self)
+        right_frame = ttk.LabelFrame(self, text="Final Costs Area")
         right_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
 
         tk.Label(right_frame, text="Bridge ID").grid(row=0, column=0)
@@ -85,7 +85,7 @@ class FinalResultTab(ttk.Frame):
         self.total_maintenance_label.config(text=formatted_total)
 
     def create_detailed_grid(self):
-        detailed_frame = tk.Frame(self)
+        detailed_frame = ttk.LabelFrame(self, text="Detailed Information")
         detailed_frame.grid(row=1, column=0, columnspan=2, padx=20, pady=20, sticky="nsew")
 
         headers = [
