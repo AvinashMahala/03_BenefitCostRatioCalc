@@ -6,17 +6,18 @@ class Element:
         self.units = units
 
 
-class DeckElementsMData:
+class SteelElementsMData:
     def __init__(self):
         self.headers = ["NB Element", "El. No.", "Element Name", "Units"]
         self.elements = {
-            "12": Element("Decks_Slabs", 12, "12-Reinforced Concrete Deck", "AREA (s. ft.)"),
-            "13": Element("Decks_Slabs", 13, "13-Prestressed Concrete Deck", "AREA (s. ft.)"),
-            "16": Element("Decks_Slabs", 16, "16-Reinforced Concrete Top Flange", "AREA (s. ft.)"),
-            "38": Element("Decks_Slabs", 38, "38-Reinforced Concrete Slab", "AREA (s. ft.)"),
-            "42": Element("Decks_Slabs", 42, "42-DeckA", "AREA (s. ft.)"),
-            "510": Element("Decks_Slabs", 510, "510-Wearing Surfaces(Deck)", "AREA (s. ft.)"),
-            "Others":Element("Decks_Slabs", "0", "Others", "NA"),
+            "107": Element("Sup_Steel", 107, "107-Steel Open Girder/Beam", "LENGTH (ft.)"),
+            "164": Element("Sup_Steel", 164, "164-Secondary Steel member", "Each"),
+            "152": Element("Sup_Steel", 152, "152-Steel Floor Beam", "LENGTH (ft.)"),
+            "515": Element("Sup_Steel", 515, "515-Steel Protective coating", "Sq.Ft"),
+            "202": Element("Sup_Steel", 202, "202-Steel Column", "Each"),
+            "219": Element("Sup_Steel", 219, "219-Steel Abutment", "LENGTH ft."),
+            "231": Element("Sup_Steel", 231, "231-Steel Pier Cap", "LENGTH (ft.)"),
+            "Others":Element("Sup_Steel", "0", "Others", "NA"),
         }
 
     def get_element(self, el_no):
@@ -33,11 +34,3 @@ class DeckElementsMData:
 
     def get_headers(self):
         return self.headers
-
-
-# # Example usage:
-# elements = ElementsDataset()
-# print(elements.get_headers())  # ['NB Element', 'El. No.', 'Element Name', 'Units']
-# element = elements.get_element(13)
-# print(f"{element.nb_element}, {element.el_no}, {element.element_name}, {element.units}")  
-# # 'Decks / Slabs', 13, '13-Prestressed Concrete Deck', 'AREA (s. ft.)'
