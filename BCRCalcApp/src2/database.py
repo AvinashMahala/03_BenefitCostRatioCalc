@@ -26,3 +26,11 @@ class Database:
         self.cursor.execute("""INSERT INTO BridgeSteelCalcHist VALUES (?, ?, ?)""", (bridge_id, uuid, final_cost))
         self.conn.commit()
 
+    def insert_bridge_sup_calc_hist(self, bridge_id, uuid, final_cost):
+        self.cursor.execute("""INSERT INTO BridgeSupCalcHist VALUES (?, ?, ?)""", (bridge_id, uuid, final_cost))
+        self.conn.commit()
+
+    def insert_bridge_sub_calc_hist(self, bridge_id, uuid, final_cost):
+        self.cursor.execute("""INSERT INTO BridgeSubCalcHist VALUES (?, ?, ?)""", (bridge_id, uuid, final_cost))
+        self.conn.commit()
+
