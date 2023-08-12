@@ -1,15 +1,15 @@
 import tkinter as tk
 from tkinter import ttk
-from deck_data_elem_num_nm import DeckElementsMData
-from deck_data_defects import DeckDefectsData
-from deck_data_units import DeckUnitsDB
-from deck_data_cs import DeckConditionStateData
-from deck_data_cs import retrieve_data_by_bid_item_num
+from steel_data_elem_num_nm import SteelElementsMData
+from steel_data_defects import SteelDefectsData
+from steel_data_units import SteelUnitsDB
+from steel_data_cs import SteelConditionStateData
+from steel_data_cs import retrieve_data_by_bid_item_num
 import sqlite3
 from tkinter import messagebox
-from deck_validations import validate_total_quantity
+from steel_validations import validate_total_quantity
 
-class DeckDynamicRow(ttk.Frame):
+class SteelDynamicRow(ttk.Frame):
     def __init__(self, master, container, controller, bridgeId, uuid, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
         self.controller = controller
@@ -17,16 +17,16 @@ class DeckDynamicRow(ttk.Frame):
         self.bridgeId = bridgeId
         self.uuid = uuid
 
-        self.allDeckElemsData = DeckElementsMData()
-        self.elemNumDrpDnValues = self.allDeckElemsData.get_elementsNumList()
-        self.allDeckUnitsDict = DeckUnitsDB().getDeckUnitsList()
-        self.allDeckDefectsData = DeckDefectsData()
-        self.defectsList = self.allDeckDefectsData.getOnlyDefectsList()
+        self.allSteelElemsData = SteelElementsMData()
+        self.elemNumDrpDnValues = self.allSteelElemsData.get_elementsNumList()
+        self.allSteelUnitsDict = SteelUnitsDB().getSteelUnitsList()
+        self.allSteelDefectsData = SteelDefectsData()
+        self.defectsList = self.allSteelDefectsData.getOnlyDefectsList()
 
-        self.DeckDefectsState1=self.allDeckDefectsData.getDefectListForState(1)
-        self.DeckDefectsState2=self.allDeckDefectsData.getDefectListForState(2)
-        self.DeckDefectsState3=self.allDeckDefectsData.getDefectListForState(3)
-        self.DeckDefectsState4=self.allDeckDefectsData.getDefectListForState(4)
+        self.SteelDefectsState1=self.allSteelDefectsData.getDefectListForState(1)
+        self.SteelDefectsState2=self.allSteelDefectsData.getDefectListForState(2)
+        self.SteelDefectsState3=self.allSteelDefectsData.getDefectListForState(3)
+        self.SteelDefectsState4=self.allSteelDefectsData.getDefectListForState(4)
 
         self.init_ui()
 
@@ -83,7 +83,7 @@ class DeckDynamicRow(ttk.Frame):
 
         self.units_var = tk.StringVar()
         self.units_label = ttk.Label(self.bridge_info_frame, text="Units")
-        self.units_dropdown = ttk.Combobox(self.bridge_info_frame, textvariable=self.units_var, values=list(self.allDeckUnitsDict.keys()), state="disabled")
+        self.units_dropdown = ttk.Combobox(self.bridge_info_frame, textvariable=self.units_var, values=list(self.allSteelUnitsDict.keys()), state="disabled")
         self.units_dropdown.bind('<<ComboboxSelected>>', self.on_units_dropdown_selected)
 
         # Grid layout for Bridge Information
@@ -229,7 +229,7 @@ class DeckDynamicRow(ttk.Frame):
             self.element_type_entry['state'] = 'normal'
             self.element_type_entry.delete(0, 'end') 
         else:
-            self.element_type_var=self.allDeckElemsData.get_element(selected_option).element_name
+            self.element_type_var=self.allSteelElemsData.get_element(selected_option).element_name
             self.element_type_entry['state'] = 'normal'
             self.element_type_entry.insert(0, self.element_type_var)
             self.element_type_entry['state'] = 'disabled'
@@ -266,13 +266,13 @@ class DeckDynamicRow(ttk.Frame):
     #########################################################################
     def get_defect_bid_items_str(self, cs_index, selected_defect_name):
         if cs_index == 1:
-            return self.DeckDefectsState1[selected_defect_name]
+            return self.SteelDefectsState1[selected_defect_name]
         elif cs_index == 2:
-            return self.DeckDefectsState2[selected_defect_name]
+            return self.SteelDefectsState2[selected_defect_name]
         elif cs_index == 3:
-            return self.DeckDefectsState3[selected_defect_name]
+            return self.SteelDefectsState3[selected_defect_name]
         elif cs_index == 4:
-            return self.DeckDefectsState4[selected_defect_name]
+            return self.SteelDefectsState4[selected_defect_name]
         else:
             return "None"
     #########################################################################        
