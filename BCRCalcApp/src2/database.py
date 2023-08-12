@@ -19,6 +19,10 @@ class Database:
         self.conn.commit()
 
     def insert_bridge_deck_calc_hist(self, bridge_id, uuid, final_cost):
-        self.cursor.execute("""INSERT INTO BridgeDeckCalcHist VALUES (?, ?, ?)""", (bridge_id, uuid, final_cost))
+        self.cursor.execute("""INSERT INTO BridgeDeckCalcHist VALUES (?, ?, ?, ?)""", (bridge_id, uuid, final_cost, "deck"))
+        self.conn.commit()
+
+    def insert_bridge_steel_calc_hist(self, bridge_id, uuid, final_cost):
+        self.cursor.execute("""INSERT INTO BridgeDeckCalcHist VALUES (?, ?, ?, ?)""", (bridge_id, uuid, final_cost, "steel"))
         self.conn.commit()
 
