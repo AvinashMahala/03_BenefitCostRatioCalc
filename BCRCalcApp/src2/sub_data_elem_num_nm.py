@@ -6,18 +6,18 @@ class Element:
         self.units = units
 
 
-class DeckElementsMData:
+class SubElementsMData:
     def __init__(self):
         self.headers = ["NB Element", "El. No.", "Element Name", "Units"]
         self.elements = {
-            "204": SubstructureElement("Substructures", 204, "204-Prestressed Concrete Column", "EACH"),
-            "205": SubstructureElement("Substructures", 205, "205-Reinforced Concrete Column", "EACH"),
-            "210": SubstructureElement("Substructures", 210, "210-Reinforced Concrete Pier Wall", "LENGTH ft."),
-            "215": SubstructureElement("Substructures", 215, "215-Reinforced Concrete Abutment", "LENGTH ft."),
-            "264": SubstructureElement("Substructures", 264, "264-Reinforced Concrete Retaining Wall", "Sq.ft"),
-            "270": SubstructureElement("Substructures", 270, "270-Reinforced Concrete Wing Wall", "Each"),
-            "233": SubstructureElement("Substructures", 233, "233-Prestressed Concrete Pier Cap", "LENGTH (ft.)"),
-            "234": SubstructureElement("Substructures", 234, "234-Reinforced Concrete Pier Cap", "LENGTH (ft.)"),
+            "204": Element("Substructures", 204, "204-Prestressed Concrete Column", "EACH"),
+            "205": Element("Substructures", 205, "205-Reinforced Concrete Column", "EACH"),
+            "210": Element("Substructures", 210, "210-Reinforced Concrete Pier Wall", "LENGTH ft."),
+            "215": Element("Substructures", 215, "215-Reinforced Concrete Abutment", "LENGTH ft."),
+            "264": Element("Substructures", 264, "264-Reinforced Concrete Retaining Wall", "Sq.ft"),
+            "270": Element("Substructures", 270, "270-Reinforced Concrete Wing Wall", "Each"),
+            "233": Element("Substructures", 233, "233-Prestressed Concrete Pier Cap", "LENGTH (ft.)"),
+            "234": Element("Substructures", 234, "234-Reinforced Concrete Pier Cap", "LENGTH (ft.)"),
         }
 
     def get_element(self, el_no):

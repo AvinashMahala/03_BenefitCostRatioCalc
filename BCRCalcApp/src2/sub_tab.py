@@ -1,11 +1,11 @@
 import re
 import tkinter as tk
 from tkinter import ttk
-from deck_dynamic_row import DeckDynamicRow
+from sub_dynamic_row import SubDynamicRow
 # from database import Database
 from tkinter import messagebox
 
-class DeckTab(ttk.Frame):
+class SubTab(ttk.Frame):
     def __init__(self, container, controller, bridgeId, uuid, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
         self.controller = controller
@@ -104,7 +104,7 @@ class DeckTab(ttk.Frame):
         self.calculate_store_to_db_btn.grid(row=0, column=2)
 
         # Reset button
-        self.reset_button = ttk.Button(self.final_cost_area, text="Reset", command=self.reset_deck_tab)
+        self.reset_button = ttk.Button(self.final_cost_area, text="Reset", command=self.reset_sub_tab)
         self.reset_button.grid(row=1, column=0, columnspan=3)
 
     def add_row(self):
@@ -112,7 +112,7 @@ class DeckTab(ttk.Frame):
             tk.messagebox.showerror("Error", "Cannot add more than 10 rows.")
             return
 
-        row = DeckDynamicRow(self ,self.calculation_form_area, self.controller,self.bridgeId,self.uuid,)
+        row = SubDynamicRow(self ,self.calculation_form_area, self.controller,self.bridgeId,self.uuid,)
         row.pack()
         self.dynamic_rows.append(row)
         self.on_canvas_configure(None)
@@ -123,7 +123,7 @@ class DeckTab(ttk.Frame):
             row.destroy()
         self.dynamic_rows = []
 
-    def reset_deck_tab(self):
+    def reset_sub_tab(self):
         self.reset_dynamic_rows()
         self.final_cost_label_var.set("")
 
@@ -160,8 +160,8 @@ class DeckTab(ttk.Frame):
                 return
 
             # Now you can store the final_cost to the database
-            self.database.insert_bridge_deck_calc_hist(self.bridgeId, self.uuid, final_cost)
-            messagebox.showinfo("Success", "Deck Final Cost stored to DB!")
+            self.database.insert_bridge_sub_calc_hist(self.bridgeId, self.uuid, final_cost)
+            messagebox.showinfo("Success", "Sub Final Cost stored to DB!")
 
         except ValueError:
             messagebox.showerror("Error", "Error processing the final cost. Please enter a valid float (e.g., 'x.xx' or 'xx.xx').")
