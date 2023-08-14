@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build-windows:
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
     - name: Checkout repository
@@ -23,7 +23,7 @@ jobs:
 
     - name: Archive dist folder using PowerShell
       run: |
-        Compress-Archive -Path dist\* -DestinationPath dist.zip
+        Compress-Archive -Path dist/* -DestinationPath dist.zip
       shell: pwsh
 
     - name: List files in directory
