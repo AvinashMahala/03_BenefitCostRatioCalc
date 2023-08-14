@@ -30,6 +30,9 @@ class Application(tk.Tk):
         self.notebook.add(self.homepage, text="Homepage")
         self.notebook.pack(fill="both", expand=True)
 
+        self.final_result_tab = FinalResultTab(self.notebook, self,self.bridgeId,self.uuid)
+        self.notebook.add(self.final_result_tab, text="Final Result")
+
         # Initially disable other tabs
         self.deck = None
         self.steel = None
@@ -48,13 +51,11 @@ class Application(tk.Tk):
         self.steel_tab = SteelTab(self.notebook, self,bridge_id,uuid)
         self.sub_tab = SubTab(self.notebook, self,bridge_id,uuid)
         self.sup_tab = SupTab(self.notebook, self,bridge_id,uuid)
-        self.final_result_tab = FinalResultTab(self.notebook, self,bridge_id,uuid)
-
+    
         self.notebook.add(self.deck_tab, text="Deck")
         self.notebook.add(self.steel_tab, text="Steel")
         self.notebook.add(self.sub_tab, text="SubStructure")
         self.notebook.add(self.sup_tab, text="SuperStructure")
-        self.notebook.add(self.final_result_tab, text="Final Result")
         # Set the currently displayed tab to the newly added tab
         self.notebook.select(self.deck_tab)
         

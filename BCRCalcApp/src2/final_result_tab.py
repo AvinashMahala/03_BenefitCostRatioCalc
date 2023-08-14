@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+import sqlite3
 
 class FinalResultTab(ttk.Frame):
     def __init__(self, container, controller, bridge_id, uuid, *args, **kwargs):
@@ -37,10 +38,10 @@ class FinalResultTab(ttk.Frame):
         
         # Insert data (example values)
         data = [
-            ("Deck", "$4,32,932.77"),
-            ("Superstructure", "$4,79,65,002.50"),
-            ("Steel", "$58,47,305.97"),
-            ("Substructure", "$23,679.72")
+            ("Deck", "$0"),
+            ("Superstructure", "$0"),
+            ("Steel", "$0"),
+            ("Substructure", "$0")
         ]
 
         self.final_costs = []
@@ -64,10 +65,79 @@ class FinalResultTab(ttk.Frame):
 
         self.create_detailed_grid()
 
+    def fetch_bridge_id(self, uuid_value):
+        # Connect to the SQLite database
+        connection = sqlite3.connect('BenefitCostRatioApp.db')
+        cursor = connection.cursor()
+
+        # Fetch bridge_id from CalculationMetaData table
+        cursor.execute('SELECT bridge_id FROM CalculationMetaData WHERE uuid = ?', (uuid_value,))
+        bridge_id = cursor.fetchone()
+
+        # Close the connection
+        connection.close()
+
+        return bridge_id[0] if bridge_id else None
+
     def retrieve_final_cost(self):
-        # Placeholder function for when you connect to the database or some other service.
-        # Here, you would use the UUID entered to retrieve the associated final costs.
-        pass
+        uuid_value = self.uuid_entry.get().strip()  # Get UUID from entry
+        if not uuid_value:
+            # Display an error message if UUID is not provided
+            tk.messagebox.showerror("Error", "Please provide a UUID!")
+            return
+
+         # Fetch and update the bridge ID
+        bridge_id = self.fetch_bridge_id(uuid_value)
+        if bridge_id:
+            self.entries[0].delete(0, tk.END)
+            self.entries[0].insert(0, bridge_id)
+        else:
+            messagebox.showerror("Error", "No bridge ID found for the given UUID.")
+
+        costs = self.fetch_costs(uuid_value)  # Fetch the costs
+
+        # Assuming costs is a dictionary with keys: Deck, Superstructure, Steel, Substructure
+        for entry, key in zip(self.final_costs, ["Deck", "Superstructure", "Steel", "Substructure"]):
+            cost_value = costs.get(key, "N/A")
+            entry.delete(0, tk.END)  # Clear the entry
+            entry.insert(0, cost_value)  # Set the cost value
+        
+
+
+
+
+
+    def fetch_costs(self, uuid_value):
+        connection = sqlite3.connect('BenefitCostRatioApp.db')
+        cursor = connection.cursor()
+
+        # Dictionary to hold costs fetched from database
+        costs = {}
+
+        # Fetch cost from BridgeDeckCalcHist table
+        cursor.execute('SELECT final_cost FROM BridgeDeckCalcHist WHERE uuid = ?', (uuid_value,))
+        deck_cost = cursor.fetchone()
+        costs["Deck"] = deck_cost[0] if deck_cost else "N/A"
+
+        # Fetch cost from BridgeSteelCalcHist table
+        cursor.execute('SELECT final_cost FROM BridgeSteelCalcHist WHERE uuid = ?', (uuid_value,))
+        steel_cost = cursor.fetchone()
+        costs["Steel"] = steel_cost[0] if steel_cost else "N/A"
+
+        # Fetch cost from BridgeSubCalcHist table
+        cursor.execute('SELECT final_cost FROM BridgeSubCalcHist WHERE uuid = ?', (uuid_value,))
+        sub_cost = cursor.fetchone()
+        costs["Substructure"] = sub_cost[0] if sub_cost else "N/A"
+
+        # Fetch cost from BridgeSupCalcHist table
+        cursor.execute('SELECT final_cost FROM BridgeSupCalcHist WHERE uuid = ?', (uuid_value,))
+        sup_cost = cursor.fetchone()
+        costs["Superstructure"] = sup_cost[0] if sup_cost else "N/A"
+
+        # Close the connection
+        connection.close()
+
+        return costs
 
     def calculate_total(self):
         total = 0
