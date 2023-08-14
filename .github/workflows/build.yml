@@ -32,9 +32,10 @@ jobs:
     - name: Build with PyInstaller
       run: pyinstaller main.py
 
-    - name: Archive dist folder
+    - name: Archive dist folder using PowerShell
       run: |
-        tar -czvf dist.tar.gz dist/
+        Compress-Archive -Path dist\* -DestinationPath dist.zip
+      shell: pwsh
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
