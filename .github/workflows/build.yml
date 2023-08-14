@@ -2,58 +2,42 @@ name: Build Workflow
 
 on:
   push:
+#    branches: master
 
 jobs:
   build-windows:
     runs-on: windows-2019
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-        with:
-            ref: refs/heads/master # or whichever branch you want
-      
+        uses: actions/checkout@v1
       - name: Install Python
         uses: actions/setup-python@v1
         with:
           python-version: '3.7'
           architecture: 'x64'
-      
       - name: Install requirements
         run: |
           pip install -r requirements.txt
-      
       - name: Run PyInstaller
         run: |
           python -m PyInstaller BenefitCostRatioCalcApp.spec
-      
       - uses: actions/upload-artifact@v2
         with:
           name: BenefitCostRatioCalcApp
           path: dist/BenefitCostRatioCalcApp.exe
-      
-      - name: Set the tag name
-        run: echo "TAG_NAME=$(date +v%Y%m%d%H%M%S)" >> $GITHUB_ENV
-      
-      - name: Create and push git tag
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git tag ${{ env.TAG_NAME }}
-          git push origin ${{ env.TAG_NAME }}
-      
+
       - name: create release
         id: create_release
         uses: actions/create-release@v1
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: ${{ env.TAG_NAME }}
+          tag_name: 'v1.0.0' # or any other unique tag name
+          release_name: 'Update build.yml'
           body: |
             Test Release v1.0.0
           draft: false
           prerelease: false
-      
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
