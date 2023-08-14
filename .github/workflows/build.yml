@@ -38,7 +38,7 @@ jobs:
         if-no-files-found: warn
     
     - name: Archive production artifacts
-      run: Compress-Archive -Path dist/* -DestinationPath dist.zip
+      run: Compress-Archive -Path dist/* -DestinationPath dist.zip -Force
       shell: pwsh
   
     - name: Create Release
