@@ -100,7 +100,7 @@ class FinalResultTab(ttk.Frame):
         for entry, key in zip(self.final_costs, ["Deck", "Superstructure", "Steel", "Substructure"]):
             cost_value = costs.get(key, "N/A")
             entry.delete(0, tk.END)  # Clear the entry
-            entry.insert(0, cost_value)  # Set the cost value
+            entry.insert(0, "${:,.2f}".format(cost_value))
         
 
 
@@ -111,28 +111,28 @@ class FinalResultTab(ttk.Frame):
         connection = sqlite3.connect('BenefitCostRatioApp.db')
         cursor = connection.cursor()
 
-        # Dictionary to hold costs fetched from database
-        costs = {}
+        # Dictionaries to store the costs
+        costs = {
+            "Deck": 0,
+            "Steel": 0,
+            "Substructure": 0,
+            "Superstructure": 0
+        }
 
-        # Fetch cost from BridgeDeckCalcHist table
-        cursor.execute('SELECT final_cost FROM BridgeDeckCalcHist WHERE uuid = ?', (uuid_value,))
-        deck_cost = cursor.fetchone()
-        costs["Deck"] = deck_cost[0] if deck_cost else "N/A"
+        tables = {
+            "Deck": "BridgeDeckCalcHist",
+            "Steel": "BridgeSteelCalcHist",
+            "Substructure": "BridgeSubCalcHist",
+            "Superstructure": "BridgeSupCalcHist"
+        }
 
-        # Fetch cost from BridgeSteelCalcHist table
-        cursor.execute('SELECT final_cost FROM BridgeSteelCalcHist WHERE uuid = ?', (uuid_value,))
-        steel_cost = cursor.fetchone()
-        costs["Steel"] = steel_cost[0] if steel_cost else "N/A"
-
-        # Fetch cost from BridgeSubCalcHist table
-        cursor.execute('SELECT final_cost FROM BridgeSubCalcHist WHERE uuid = ?', (uuid_value,))
-        sub_cost = cursor.fetchone()
-        costs["Substructure"] = sub_cost[0] if sub_cost else "N/A"
-
-        # Fetch cost from BridgeSupCalcHist table
-        cursor.execute('SELECT final_cost FROM BridgeSupCalcHist WHERE uuid = ?', (uuid_value,))
-        sup_cost = cursor.fetchone()
-        costs["Superstructure"] = sup_cost[0] if sup_cost else "N/A"
+        for element, table in tables.items():
+            cursor.execute(f"SELECT final_cost FROM {table} WHERE uuid = ?", (uuid_value,))
+            
+            rows = cursor.fetchall()
+            total_cost = sum(row[0] for row in rows)
+            
+            costs[element] = total_cost  
 
         # Close the connection
         connection.close()
