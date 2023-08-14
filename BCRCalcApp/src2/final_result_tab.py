@@ -187,7 +187,7 @@ class FinalResultTab(ttk.Frame):
 
                 # Button to repopulate the maintenance cost
                 repopulate_btn = tk.Button(detailed_frame, text="Repopulate", command=self.repopulate_maintenance_cost)
-                repopulate_btn.grid(row=row, column=col + 2, padx=5, pady=5)
+                repopulate_btn.grid(row=row+1, column=col + 1, padx=5, pady=5)
             else:
                 entry = tk.Entry(detailed_frame)
                 entry.grid(row=row, column=col + 1, padx=5, pady=5)
@@ -196,7 +196,7 @@ class FinalResultTab(ttk.Frame):
 
         rows_required_for_data = len(headers) // 3
         self.calculate_bcr_btn = tk.Button(detailed_frame, text="Calculate BCR", command=self.calculate_bcr)
-        self.calculate_bcr_btn.grid(row=rows_required_for_data, columnspan=6, pady=20, padx=10)
+        self.calculate_bcr_btn.grid(row=rows_required_for_data, column=col + 1, columnspan=8, pady=20, padx=10)
 
     def repopulate_maintenance_cost(self):
         # Assuming the total cost value is stored in a variable named 'total_cost'

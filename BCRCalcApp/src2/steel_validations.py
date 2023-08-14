@@ -6,10 +6,10 @@ def validate_total_quantity(value):
         return True  # Allow empty input
     try:
         quantity = int(value)
-        if 0 <= quantity <= 10000:
+        if 0 <= quantity <= 50001:
             return True
         else:
-            messagebox.showerror("Error", "Quantity must be between 0 and 10000.")
+            messagebox.showerror("Error", "Quantity must be between 0 and 50001.")
             return False
     except ValueError:
         messagebox.showerror("Error", "Invalid input. Please enter a valid integer.")
