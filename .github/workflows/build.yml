@@ -5,45 +5,42 @@ on:
     - cron: '0 0 * * *'  # This runs every day at midnight
 
 jobs:
-  build-windows:
+  build-and-archive:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
+    # Checking out the repository
+    - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Set up Python
+    # Setting up Python
+    - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
 
-    - name: Install dependencies
+    # Installing Python dependencies
+    - name: Install Dependencies
       run: pip install -r requirements.txt
 
+    # Running PyInstaller to generate executables
     - name: Run PyInstaller
-      run: python -m PyInstaller BenefitCostRatioCalcApp.spec # Replace with your .spec file's name
+      run: python -m PyInstaller BenefitCostRatioCalcApp.spec 
 
-    - name: Archive dist folder using PowerShell
-      run: |
-        Compress-Archive -Path dist/* -DestinationPath dist.zip
+    # Archiving the dist directory
+    - name: Archive dist directory
+      run: Compress-Archive -Path dist/* -DestinationPath dist.zip -Force
       shell: pwsh
-
-    - name: List files in directory
-      run: Get-ChildItem
-      shell: pwsh
-
-    - name: Upload dist.zip as artifact
+  
+    # Uploading the dist.zip as a GitHub artifact
+    - name: Upload dist.zip as Artifact
       uses: actions/upload-artifact@v2
       with:
         name: dist-folder
         path: dist.zip
-        if-no-files-found: warn
-    
-    - name: Archive production artifacts
-      run: Compress-Archive -Path dist/* -DestinationPath dist.zip -Force
-      shell: pwsh
-  
-    - name: Create Release
+
+    # Creating a GitHub release
+    - name: Create GitHub Release
       id: create_release
       uses: actions/create-release@v1
       env:
@@ -54,8 +51,9 @@ jobs:
         body: Description of the release
         draft: false
         prerelease: false
-  
-    - name: Upload Release Asset
+
+    # Uploading dist.zip as an asset to the GitHub release
+    - name: Attach Artifact to Release
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
