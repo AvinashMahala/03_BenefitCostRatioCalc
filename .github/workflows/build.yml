@@ -9,37 +9,47 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    # Checking out the repository
+    # 1. Setup: Checking out the repository
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    # Setting up Python
+    # 2. Setup: Clear previous builds (ensuring clean build)
+    - name: Clear Previous Builds
+      run: rm -rf dist build
+      shell: pwsh
+
+    # 3. Setup: Setting up Python
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
 
-    # Installing Python dependencies
+    # 4. Dependencies: Installing Python dependencies
     - name: Install Dependencies
       run: pip install -r requirements.txt
 
-    # Running PyInstaller to generate executables
+    # 5. Build: Running PyInstaller to generate executables
     - name: Run PyInstaller
       run: python -m PyInstaller BenefitCostRatioCalcApp.spec 
 
-    # Archiving the dist directory
+    # Logging: Displaying generated files
+    - name: Display Generated Files
+      run: Get-ChildItem -Path dist -Recurse
+      shell: pwsh
+
+    # 6. Archive: Archiving the dist directory
     - name: Archive dist directory
       run: Compress-Archive -Path dist/* -DestinationPath dist.zip -Force
       shell: pwsh
   
-    # Uploading the dist.zip as a GitHub artifact
+    # 7. Artifact: Uploading the dist.zip as a GitHub artifact
     - name: Upload dist.zip as Artifact
       uses: actions/upload-artifact@v2
       with:
         name: dist-folder
         path: dist.zip
 
-    # Creating a GitHub release
+    # 8. Release: Creating a GitHub release
     - name: Create GitHub Release
       id: create_release
       uses: actions/create-release@v1
@@ -52,7 +62,7 @@ jobs:
         draft: false
         prerelease: false
 
-    # Uploading dist.zip as an asset to the GitHub release
+    # 9. Release: Uploading dist.zip as an asset to the GitHub release
     - name: Attach Artifact to Release
       uses: actions/upload-release-asset@v1
       env:
@@ -62,3 +72,10 @@ jobs:
         asset_path: ./dist.zip
         asset_name: dist.zip
         asset_content_type: application/zip
+
+    # 10. Cleanup: Optionally, clean up artifacts to save space (or handle other post-process actions)
+    - name: Cleanup Artifacts
+      run: rm dist.zip
+      shell: pwsh
+
+    # Optional: Notify team members or stakeholders, integrate with other systems, etc.
