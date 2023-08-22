@@ -14,12 +14,6 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    # 2. Setup: Clear previous builds (ensuring clean build)
-    - name: Clear existing build artifacts
-      run: |
-        Remove-Item -Recurse -Force dist
-        Remove-Item -Recurse -Force build
-
     # 3. Setup: Setting up Python
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
