@@ -1,9 +1,8 @@
 name: Build and Archive Workflow
 
 on:
-  push:
-    branches:
-      - master  # Change this to your default branch if it's different
+  schedule:
+    - cron: '0 0 * * *'  # This runs every day at midnight
 
 jobs:
   build-and-archive:
