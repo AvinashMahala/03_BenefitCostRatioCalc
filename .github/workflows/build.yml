@@ -1,8 +1,9 @@
 name: Build and Archive Workflow
 
 on:
-  schedule:
-    - cron: '0 0 * * *'  # This runs every day at midnight
+  push:
+    branches:
+      - master  # Change this to your default branch if it's different
 
 jobs:
   build-and-archive:
@@ -14,9 +15,10 @@ jobs:
       uses: actions/checkout@v2
 
     # 2. Setup: Clear previous builds (ensuring clean build)
-    - name: Clear Previous Builds
-      run: rm -rf dist build
-      shell: pwsh
+    - name: Clear existing build artifacts
+      run: |
+        Remove-Item -Recurse -Force dist
+        Remove-Item -Recurse -Force build
 
     # 3. Setup: Setting up Python
     - name: Set up Python 3.9
