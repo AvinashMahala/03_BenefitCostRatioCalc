@@ -12,59 +12,36 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    # 1. Setup: Checking out the repository
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    # 3. Setup: Setting up Python
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
 
-    # 4. Dependencies: Installing Python dependencies
     - name: Install Dependencies
       run: pip install -r requirements.txt
 
-    # 5. Build: Running PyInstaller to generate executables
     - name: Run PyInstaller
       run: python -m PyInstaller BenefitCostRatioCalcApp.spec 
 
-    # Logging: Displaying generated files
     - name: Display Generated Files
       run: Get-ChildItem -Path dist -Recurse
       shell: pwsh
 
-    # 6. Archive: Archiving the dist directory
-    - name: Archive dist directory
-      run: Compress-Archive -Path dist/* -DestinationPath dist.zip -Force
-      shell: pwsh
-  
-    # 7. Artifact: Uploading the dist.zip as a GitHub artifact
-    - name: Upload dist.zip as Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: dist-folder
-        path: dist.zip
+    - name: Get Short Commit Hash
+      id: commit_hash
+      run: echo "::set-output name=commit_hash::${{ github.sha:0:7 }}"
 
-    # 7.1 Dynamic Tag Naming
-    - name: Create unique tag name
-      id: tag
-      run: |
-        $date = Get-Date -Format 'yyyyMMddHHmmss'
-        $random = -join (33..126 | ForEach-Object { [char]$_ } | Get-Random -Count 8)
-        echo "release-${date}-${random}"
-    
-
-    # 8. Release: Creating a GitHub release
     - name: Create GitHub Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.run_number }}-${{ steps.timestamp.outputs.timestamp }}
-        release_name: Release ${{ github.run_number }}-${{ steps.timestamp.outputs.timestamp }}
+        tag_name: release-${{ steps.commit_hash.outputs.commit_hash }}-${{ steps.timestamp.outputs.timestamp }}
+        release_name: Release ${{ steps.commit_hash.outputs.commit_hash }}-${{ steps.timestamp.outputs.timestamp }}
         body: Description of the release
         draft: false
         prerelease: false
@@ -72,9 +49,17 @@ jobs:
     - name: Get Timestamp
       id: timestamp
       run: echo "::set-output name=timestamp::$(Get-Date -u +'%Y%m%d%H%M%S')"
-    
 
-    # 9. Release: Uploading dist.zip as an asset to the GitHub release
+    - name: Archive dist directory
+      run: Compress-Archive -Path dist/* -DestinationPath dist.zip -Force
+      shell: pwsh
+  
+    - name: Upload dist.zip as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: dist-folder
+        path: dist.zip
+
     - name: Attach Artifact to Release
       uses: actions/upload-release-asset@v1
       env:
@@ -85,7 +70,6 @@ jobs:
         asset_name: dist.zip
         asset_content_type: application/zip
 
-    # 10. Cleanup: Optionally, clean up artifacts to save space (or handle other post-process actions)
     - name: Cleanup Artifacts
       run: rm dist.zip
       shell: pwsh
