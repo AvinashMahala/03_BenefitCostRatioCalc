@@ -46,8 +46,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: release-${{ github.run_number }}-$(Get-Date -u +'%Y%m%d%H%M%S')
-        release_name: Release ${{ github.run_number }}-$(Get-Date -u +'%Y%m%d%H%M%S')
+        tag_name: release-${{ github.run_number }}
+        release_name: Release ${{ github.run_number }}
         body: Description of the release
         draft: false
         prerelease: false
