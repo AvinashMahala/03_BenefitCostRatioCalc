@@ -63,11 +63,16 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.tag.outputs.stdout }}  # Use the dynamic tag name
-        release_name: Release ${{ steps.tag.outputs.stdout }}
+        tag_name: ${{ github.run_number }}-${{ steps.timestamp.outputs.timestamp }}
+        release_name: Release ${{ github.run_number }}-${{ steps.timestamp.outputs.timestamp }}
         body: Description of the release
         draft: false
         prerelease: false
+
+    - name: Get Timestamp
+      id: timestamp
+      run: echo "::set-output name=timestamp::$(Get-Date -u +'%Y%m%d%H%M%S')"
+    
 
     # 9. Release: Uploading dist.zip as an asset to the GitHub release
     - name: Attach Artifact to Release
