@@ -50,7 +50,10 @@ jobs:
     # 7.1 Dynamic Tag Naming
     - name: Create unique tag name
       id: tag
-      run: echo "release-$(date -u +'%Y%m%d%H%M%S')-$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)"
+      run: |
+        $date = Get-Date -Format 'yyyyMMddHHmmss'
+        $random = -join (33..126 | ForEach-Object { [char]$_ } | Get-Random -Count 8)
+        echo "release-${date}-${random}"
     
 
     # 8. Release: Creating a GitHub release
