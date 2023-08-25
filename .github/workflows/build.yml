@@ -59,3 +59,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./dist.zip
+        asset_name: dist-${{ github.run_number }}.zip  # Adjust the asset name as needed
+        asset_content_type: application/zip
