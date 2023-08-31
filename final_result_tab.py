@@ -65,6 +65,8 @@ class FinalResultTab(ttk.Frame):
 
         self.create_detailed_grid()
 
+        
+
     def fetch_bridge_id(self, uuid_value):
         # Connect to the SQLite database
         connection = sqlite3.connect('BenefitCostRatioApp.db')
@@ -159,7 +161,7 @@ class FinalResultTab(ttk.Frame):
         detailed_frame.grid(row=1, column=0, columnspan=2, padx=20, pady=20, sticky="nsew")
 
         headers = [
-            "Bridge ID", "ADT", "Detour Length (mi)", "ADT_TRk", "ADT w/o TRK", "Personal purpose ADT",
+            "Bridge ID*", "ADT*", "Detour Length (mi)*", "ADT_TRk*", "ADT w/o TRK", "Personal purpose ADT",
             "Business purpose ADT", "$ Value of Travel Time Saving (VTTS)/Day", "Vehicle operating cost/ Day",
             "Emission Costs", "Total benefit/day", "Total benefit/ year", "Maintenance cost","BCR"
         ]
@@ -197,6 +199,97 @@ class FinalResultTab(ttk.Frame):
         rows_required_for_data = len(headers) // 3
         self.calculate_bcr_btn = tk.Button(detailed_frame, text="Calculate BCR", command=self.calculate_bcr)
         self.calculate_bcr_btn.grid(row=rows_required_for_data, column=col + 1, columnspan=8, pady=20, padx=10)
+
+        # Button to clear all fields
+        clear_btn = tk.Button(detailed_frame, text="Clear All Fields", command=self.clear_fields)
+        clear_btn.grid(row=rows_required_for_data + 1, column=0, columnspan=8, pady=20, padx=10)
+
+        # Button to calculate fields
+        self.calculate_fields_btn = tk.Button(detailed_frame, text="Calculate Fields", command=self.calculate_fields)
+        self.calculate_fields_btn.grid(row=rows_required_for_data + 2, column=col + 1, columnspan=8, pady=20, padx=10)
+
+
+    def calculate_fields(self):
+        # Get values from the Entry fields
+        adt_value = self.entries[1].get()
+        detour_length_value = self.entries[2].get()
+        adt_trk_value = self.entries[3].get()
+
+        # Check if any of the required fields are missing
+        if not all([adt_value, detour_length_value, adt_trk_value]):
+            tk.messagebox.showerror("Error", "Please enter values for ADT, Detour Length, and ADT_TRk.")
+            return
+
+        adt_wo_trk = float(adt_value) - float(adt_trk_value)
+        personal_purpose_adt = adt_wo_trk * 0.882
+        business_purpose_adt = adt_wo_trk * 0.118
+
+        vtts_per_day = (float(adt_trk_value) * 1 * 32.4 +
+                        personal_purpose_adt * 1.67 * 17 +
+                        business_purpose_adt * 1.67 * 31.9) * (float(detour_length_value) / 75)
+
+        vehicle_operating_cost_per_day = (float(adt_trk_value) * 1.01 +
+                                          adt_wo_trk * 0.46) * float(detour_length_value)
+
+        emission_costs_per_day = (0.143 * 16800 + 0.008 * 810500 + 400 * 57 + 0.0418 * 45100) * \
+                                 float(adt_value) * float(detour_length_value) / 1000000
+
+        total_benefit_per_day = vtts_per_day + vehicle_operating_cost_per_day + emission_costs_per_day
+        total_benefit_per_year = total_benefit_per_day * 356
+
+        maintenance_cost = float(self.maintenance_cost_entry.get())
+        bcr_value = total_benefit_per_year / maintenance_cost
+
+        # Update the Entry fields with calculated values
+        self.entries[4].delete(0, tk.END)
+        self.entries[4].insert(0, "${:.2f}".format(adt_wo_trk))
+
+        self.entries[5].delete(0, tk.END)
+        self.entries[5].insert(0, "${:.2f}".format(personal_purpose_adt))
+
+        self.entries[6].delete(0, tk.END)
+        self.entries[6].insert(0, "${:.2f}".format(business_purpose_adt))
+
+        self.entries[7].delete(0, tk.END)
+        self.entries[7].insert(0, "${:.2f}".format(vtts_per_day))
+
+        self.entries[8].delete(0, tk.END)
+        self.entries[8].insert(0, "${:.2f}".format(vehicle_operating_cost_per_day))
+
+        self.entries[9].delete(0, tk.END)
+        self.entries[9].insert(0, "${:.2f}".format(emission_costs_per_day))
+
+        self.entries[10].delete(0, tk.END)
+        self.entries[10].insert(0, "${:.2f}".format(total_benefit_per_day))
+
+        self.entries[11].delete(0, tk.END)
+        self.entries[11].insert(0, "${:.2f}".format(total_benefit_per_year))
+
+        self.entries[13].delete(0, tk.END)
+        self.entries[13].insert(0, "{:.2f}".format(bcr_value))
+
+
+    def clear_fields(self):
+        # Clear Entry fields in UUID Area
+        self.uuid_entry.delete(0, tk.END)
+
+        # Clear Entry fields in Final Costs Area
+        for entry in self.final_costs:
+            entry.delete(0, tk.END)
+
+        # Clear Entry fields in Detailed Information Area
+        for entry in self.entries:
+            entry.delete(0, tk.END)
+
+        # Clear the Total Maintenance Cost label
+        self.total_maintenance_label.config(text="")
+
+        # Clear the Maintenance Cost Entry
+        self.maintenance_cost_entry.delete(0, tk.END)
+
+        # Clear the BCR Entry
+        self.entries[-1].delete(0, tk.END)
+
 
     def repopulate_maintenance_cost(self):
         # Assuming the total cost value is stored in a variable named 'total_cost'

@@ -20,7 +20,7 @@ def retrieve_data_by_bid_item_num(bid_item_num):
                     "WHERE BidItemNum = ?;"
             
             # Execute the query
-            cursor.execute(query, (bid_item_num,))
+            cursor.execute(query, (bid_item_num.strip(),))
             
             # Fetch the data
             data = cursor.fetchone()
