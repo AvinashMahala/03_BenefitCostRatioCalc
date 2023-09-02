@@ -55,7 +55,7 @@ Follow these steps to get started with the BCR Calculator Application:
 1. **Clone the Repository**: Begin by cloning this repository to your local machine:
 
    ```shell
-   git clone https://github.com/your-username/bcr-calculator.git
+   https://github.com/AvinashMahala/BenefitCostRatioCalc.git
    ```
 
 2. **Install Dependencies**: Install the required dependencies by running the following command:
