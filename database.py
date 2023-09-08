@@ -1,6 +1,7 @@
 #This file will manage the database connection and operations.
 
 import sqlite3
+from tkinter import messagebox
 
 class Database:
     def __init__(self):
@@ -33,4 +34,31 @@ class Database:
     def insert_bridge_sub_calc_hist(self, bridge_id, uuid, final_cost):
         self.cursor.execute("""INSERT INTO BridgeSubCalcHist VALUES (?, ?, ?)""", (bridge_id, uuid, final_cost))
         self.conn.commit()
+    
+    # Define a method to insert a row with specified values
+    def insert_row(self, bid_item_num, bid_item_desc, unit_of_meas, avg_unit_price):
+        query = "INSERT INTO BidItemPriceTxDot (BidItemNum, BidItemDesc, UnitOfMeas, AvgUnitPrice) VALUES (?, ?, ?, ?)"
+        values = (bid_item_num, bid_item_desc, unit_of_meas, avg_unit_price)
+
+        try:
+            self.cursor.execute(query, values)
+            self.conn.commit()
+            return True
+        except sqlite3.Error as e:
+            print(f"Error inserting row: {e}")
+            return False
+
+    def truncate_table(self, table_name):
+        try:
+            # Display a confirmation dialog
+            confirmed = messagebox.askyesno("Confirm Truncate", f"Are you sure you want to truncate table '{table_name}'?")
+            
+            if confirmed:
+                # Execute the SQL statement to truncate the table
+                truncate_sql = f"DELETE FROM {table_name}"
+                self.cursor.execute(truncate_sql)
+                self.conn.commit()
+                messagebox.showinfo("Success", f"Table '{table_name}' truncated successfully.")
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred: {str(e)}")
 

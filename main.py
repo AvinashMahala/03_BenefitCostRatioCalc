@@ -8,6 +8,7 @@ from steel_tab import SteelTab
 from sub_tab import SubTab
 from sup_tab import SupTab
 from final_result_tab import FinalResultTab
+from data_loader_tab import UploadExcelTab  # Import the new tab
 
 from steel import Steel
 from superstructure import Superstructure
@@ -32,6 +33,10 @@ class Application(tk.Tk):
 
         self.final_result_tab = FinalResultTab(self.notebook, self,self.bridgeId,self.uuid)
         self.notebook.add(self.final_result_tab, text="Final Result")
+
+        # Create the "Upload Excel" tab
+        self.upload_excel_tab = UploadExcelTab(self.notebook, self)
+        self.notebook.add(self.upload_excel_tab, text="Data Loader")
 
         # Initially disable other tabs
         self.deck = None

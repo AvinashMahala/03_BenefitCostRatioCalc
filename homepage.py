@@ -1,7 +1,9 @@
-#This file will contain the Homepage class.
-
+from tkinter import messagebox
+import uuid
 import tkinter as tk
 from tkinter import ttk
+from tkinter import simpledialog
+from tkinter import Menu
 from tkinter import messagebox
 import uuid
 
@@ -33,11 +35,18 @@ class Homepage(ttk.Frame):
         # Adjust the height of the button by adding padding to the text
         self.calculation_button.config(padding=(0, 15))
 
+        # Copy UUID Button
+        self.copy_uuid_button = ttk.Button(self.homepage_area, text="Copy UUID", command=self.copy_uuid)
+        self.copy_uuid_button.grid(row=3, column=0, padx=5, pady=5, sticky="ew")
+
+        # Copy Bridge ID Button
+        self.copy_bridge_id_button = ttk.Button(self.homepage_area, text="Copy Bridge ID", command=self.copy_bridge_id)
+        self.copy_bridge_id_button.grid(row=4, column=0, padx=5, pady=5, sticky="ew")
+
         # Set the background color to red using the style
         # style = ttk.Style(self)
         # style.configure('Background.TFrame', background='#e6e7e8')
         # self.homepage_area.configure(style='Background.TFrame')
-
 
     def generate_calculation(self):
         bridge_id = self.bridge_id_entry.get().strip()
@@ -54,4 +63,23 @@ class Homepage(ttk.Frame):
         self.master.activate_tabs(bridge_id, unique_id)
         self.master.show_msg(f"Successfully stored the Bridge ID: {bridge_id} and UUID: {unique_id}")
 
+    def copy_uuid(self):
+        if self.uuid:
+            # Copy the UUID to the clipboard
+            self.clipboard_clear()
+            self.clipboard_append(self.uuid)
+            self.update()  # required to ensure the clipboard is updated
+            self.master.show_msg("UUID copied to clipboard.")
+        else:
+            self.master.show_msg("UUID is empty. Generate a calculation first.")
 
+    def copy_bridge_id(self):
+        bridge_id = self.bridge_id_entry.get().strip()
+        if bridge_id:
+            # Copy the Bridge ID to the clipboard
+            self.clipboard_clear()
+            self.clipboard_append(bridge_id)
+            self.update()  # required to ensure the clipboard is updated
+            self.master.show_msg("Bridge ID copied to clipboard.")
+        else:
+            self.master.show_msg("Bridge ID is empty. Enter a Bridge ID first.")
