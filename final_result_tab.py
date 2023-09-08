@@ -65,6 +65,8 @@ class FinalResultTab(ttk.Frame):
 
         self.create_detailed_grid()
 
+        self.clear_fields()
+
         
 
     def fetch_bridge_id(self, uuid_value):
@@ -298,8 +300,21 @@ class FinalResultTab(ttk.Frame):
         self.maintenance_cost_entry.insert(0, str(self.total_cost))  # Populate with the updated value
 
     def calculate_bcr(self):
-        # Your logic to calculate BCR goes here
-        # For now, we are just setting a placeholder value
-        bcr_value = 1.25
-        self.entries[-1].delete(0, tk.END)  # Clear previous BCR value if exists
-        self.entries[-1].insert(0, str(bcr_value))
+        # Get the Total Benefit per Year and Maintenance Cost from the respective Entry fields
+        try:
+            total_benefit_per_year = float(self.entries[11].get().replace('$', '').replace(',', ''))
+            maintenance_cost = float(self.maintenance_cost_entry.get())
+            
+            # Calculate BCR
+            if maintenance_cost != 0:
+                bcr_value = total_benefit_per_year / maintenance_cost
+            else:
+                bcr_value = 0.0
+
+            # Update the BCR Entry field
+            self.entries[-1].delete(0, tk.END)
+            self.entries[-1].insert(0, "{:.2f}".format(bcr_value))
+        except ValueError:
+            # Handle the case where the input values are not valid floats
+            self.controller.show_msg("Error: Please enter valid numeric values for Total Benefit and Maintenance Cost.")
+
