@@ -35,6 +35,12 @@ class Database:
         self.cursor.execute("""INSERT INTO BridgeSubCalcHist VALUES (?, ?, ?)""", (bridge_id, uuid, final_cost))
         self.conn.commit()
     
+    def get_number_of_records(self, table_name):
+        query = f"SELECT COUNT(*) FROM {table_name}"
+        self.cursor.execute(query)
+        count = self.cursor.fetchone()[0]
+        return count
+    
     # Define a method to insert a row with specified values
     def insert_row(self, bid_item_num, bid_item_desc, unit_of_meas, avg_unit_price):
         query = "INSERT INTO BidItemPriceTxDot (BidItemNum, BidItemDesc, UnitOfMeas, AvgUnitPrice) VALUES (?, ?, ?, ?)"

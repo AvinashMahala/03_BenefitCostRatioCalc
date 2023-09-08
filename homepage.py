@@ -43,6 +43,12 @@ class Homepage(ttk.Frame):
         self.copy_bridge_id_button = ttk.Button(self.homepage_area, text="Copy Bridge ID", command=self.copy_bridge_id)
         self.copy_bridge_id_button.grid(row=4, column=0, padx=5, pady=5, sticky="ew")
 
+        # Verify Records Button
+        self.verify_records_button = ttk.Button(self.homepage_area, text="Verify Records", command=self.verify_records)
+        self.verify_records_button.grid(row=5, column=0, padx=5, pady=10, sticky="ew")
+        # Adjust the height of the button by adding padding to the text
+        self.verify_records_button.config(padding=(0, 15))
+
         # Set the background color to red using the style
         # style = ttk.Style(self)
         # style.configure('Background.TFrame', background='#e6e7e8')
@@ -83,3 +89,8 @@ class Homepage(ttk.Frame):
             self.master.show_msg("Bridge ID copied to clipboard.")
         else:
             self.master.show_msg("Bridge ID is empty. Enter a Bridge ID first.")
+
+    def verify_records(self):
+        # Get the number of records in the BidItemPriceTxDot table
+        num_records = self.master.database.get_number_of_records("BidItemPriceTxDot")
+        self.master.show_msg(f"Number of records in 'BidItemPriceTxDot' table: {num_records}")
