@@ -2,7 +2,11 @@
  Benefit Cost Ratio Calculator App
  [![Build and Archive Workflow](https://github.com/AvinashMahala/BenefitCostRatioCalc/actions/workflows/build.yml/badge.svg)](https://github.com/AvinashMahala/BenefitCostRatioCalc/actions/workflows/build.yml)
 
-
+🛠 Backend: Python, Tkinter, SQLite, Git, Pip
+🎨 Frontend: Tkinter (GUI Library)
+🧰 Dev & Deploy: Python 3.x, Git, Pip
+💌 Database: SQLite
+📦 Dependency Management: Pip
 
 Certainly, here's a more comprehensive README for your Benefit Cost Ratio (BCR) Calculator application:
 
